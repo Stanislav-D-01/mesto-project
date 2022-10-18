@@ -1,0 +1,17 @@
+.profile__user-info{
+    display: grid;
+    grid-template-columns: max-content max-content;
+    grid-template-rows: repeat(2, max-content);
+    grid-template-areas: 
+    "name edit"
+    "about about";
+    padding-left: 30px;
+}
+
+@media screen and (max-width:530px) {
+    .profile__user-info{
+       padding: 0 0 0 18px;
+       grid-template-columns: max-content max-content;
+    }
+    
+}

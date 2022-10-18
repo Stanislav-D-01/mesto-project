@@ -1,0 +1,28 @@
+.profile__user-name{
+    font-family: "Inter", Arial, sans-serif;
+    font-style: normal;
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 42px;
+    line-height: 48px;
+    margin: 0;
+    padding: 0;
+    grid-area: name;
+    align-self: end;
+    
+}
+
+.profile__user-name:hover{
+    cursor: default;
+  }
+
+@media screen and (max-width:530px) {
+    .profile__user-name{
+        font-size: 27px;
+        line-height: 33px;
+        margin: 26px 0 0 0;
+        justify-self: end;
+        
+    }
+    
+}

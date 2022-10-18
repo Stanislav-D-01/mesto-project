@@ -1,0 +1,9 @@
+.cards__description{
+    background-color: white;
+    max-height: 80px;
+    height: 100%;
+    display: flex;
+    flex-direction:row;
+    justify-content: space-between;
+
+}

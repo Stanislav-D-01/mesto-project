@@ -1,0 +1,27 @@
+.profile__user-about{
+  font-family: "Inter", Arial, sans-serif;
+  font-style: normal;
+  color: #FFFFFF;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  margin: 9px 0 0 0;
+  padding: 0;
+  grid-area: about;
+  align-self: flex-start;
+}
+
+.profile__user-about:hover{
+  cursor: default;
+}
+
+
+@media screen and (max-width:530px) {
+    .profile__user-about{
+        font-size: 14px;
+        line-height: 17px;
+        margin: 7px 0 0 0;
+       
+    }
+    
+}

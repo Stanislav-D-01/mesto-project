@@ -1,0 +1,17 @@
+.cards__like{
+    background-image: url(../../../image/Like.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 19px;
+    min-width: 22px;
+    margin: 0 20px 0 0;
+}
+
+.cards__like:hover{
+cursor: pointer;
+
+}
+
+.cards__like:active{
+    background-image: url(../../../image/like_active.svg);
+}
