@@ -18,10 +18,10 @@
           <div class="profile__user-info">
             <h1 class="profile__user-name">Жак-Ив Кусто</h1>
             <p class="profile__user-about">Исследователь океана</p>
-            <button class="profile__edit-button"><img src="./image/button__edit.svg" alt="редактировать" class="profile__edit-button-img"></button>
+            <button class="profile__edit-button" type="button"></button>
           </div>
         </div>
-        <button class="profile__add-button"></button>
+        <button class="profile__add-button" type="button"></button>
       </section>
 
       <section class="cards">
@@ -29,7 +29,7 @@
           <img src="./image/Dombai.jpg" alt="Домбай" class="cards__image">
           <div class="cards__description">
             <h2 class="cards__title">Домбай</h2>
-            <div class="cards__like"></div>
+            <button class="cards__like" type="button"></button>
           </div>
         </div>
 
@@ -37,7 +37,7 @@
           <img src="./image/Elbrus.jpg" alt="Эльбрус" class="cards__image">
           <div class="cards__description">
             <h2 class="cards__title">Эльбрус</h2>
-            <div class="cards__like"></div>
+            <button class="cards__like" type="button"></button>
           </div>
         </div>
 
@@ -45,7 +45,7 @@
           <img src="./image/Karachaevsk.jpg" alt="Карачаевск" class="cards__image">
           <div class="cards__description">
             <h2 class="cards__title">Карачаевск</h2>
-            <div class="cards__like"></div>
+            <button class="cards__like" type="button"></button>
           </div>
         </div>
 
@@ -53,7 +53,7 @@
           <img src="./image/Dombai.jpg" alt="Домбай" class="cards__image">
           <div class="cards__description">
             <h2 class="cards__title">Домбай</h2>
-            <div class="cards__like"></div>
+            <button class="cards__like" type="button"></button>
           </div>
         </div>
 
@@ -61,7 +61,7 @@
           <img src="./image/Dombai.jpg" alt="Домбай" class="cards__image">
           <div class="cards__description">
             <h2 class="cards__title">Домбай</h2>
-            <div class="cards__like"></div>
+            <button class="cards__like" type="button"></button>
           </div>
         </div>
 
@@ -69,7 +69,7 @@
           <img src="./image/Karachaevsk.jpg" alt="Карачаевск" class="cards__image">
           <div class="cards__description">
             <h2 class="cards__title">Карачаево-черкесия</h2>
-            <div class="cards__like"></div>
+            <button class="cards__like" type="button"></button>
           </div>
         </div>
       </section>
@@ -78,15 +78,17 @@
       <p class="footer__copyright">© 2022 Mesto Russia</p>
     </footer>
 
-    <div class="popup popup_opened">
+    <div class="popup popup_opene">
       <div class="popup__container">
-        <img src="./image/Close-Icon.png" alt="Закрыть" class="popup__icon-close">
+        <button class="popup__icon-close" type="button"></button>
+        <form class="form-edit-user" name="edit-user">
         <fieldset class="popup__card">
           <h2 class="popup__title">Редактировать профиль</h2>
-          <input type="text" class="popup__input-field" value="Жак-Ив Кусто">
-          <input type="text" class="popup__input-field" value="Исследователь океана">
-          <button class="popup__button-save">Сохранить</button>
+          <input type="text" class="popup__input-field" value="Жак-Ив Кусто" name="name-user" placeholder="Укажите ваше имя">
+          <input type="text" class="popup__input-field" value="Исследователь океана" name="about-user" placeholder="Напишите коротко о себе">
+          <button class="popup__button-save" type="button">Сохранить</button>
         </fieldset>
+      </form>
       </div>
     </div>
   </body>

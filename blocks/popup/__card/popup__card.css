@@ -1,7 +1,7 @@
 .popup__card{
     max-width: 430px;
     width: 100%;
-    align-self: flex-start;
+    min-height: 330px;
     margin: 0;
     padding: 0;
     background-color: white;
@@ -15,6 +15,7 @@
   @media screen and (max-width:530px) {
     .popup__card{
         max-width: 282px;
+        min-height: 322px;
         
 
     }

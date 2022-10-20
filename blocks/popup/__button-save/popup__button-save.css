@@ -1,20 +1,19 @@
 .popup__button-save{
-    max-width: 358px;
-    max-height: 50px;
-    width: 100vw;
-    height: 100vh;
-    font-family: 'Inter';
-font-style: normal;
-font-weight: 400;
-font-size: 18px;
-line-height: 22px;
-text-align: center;
-border-radius: 2px;
-
-color: #FFFFFF;
-background-color: black;
-align-self: center;
-margin: 0 0 55px 0;
+  max-width: 358px;
+  max-height: 50px;
+  width: 100vw;
+  height: 100vh;
+  font-family: "Inter", Arial, sans-serif;
+  font-style: normal;
+	font-weight: 400;
+	font-size: 18px;
+	line-height: 22px;
+	text-align: center;
+	border-radius: 2px;
+	color: #FFFFFF;
+	background-color: black;
+	align-self: center;
+	margin: 18px 0 0 0;
 }
 
 .popup__button-save:hover{
@@ -27,8 +26,8 @@ margin: 0 0 55px 0;
         font-size: 14px;
         line-height: 17px; 
         max-width: 238px;
-    max-height: 46px;
-    margin: 15px 0 25px 0;
+        max-height: 46px;
+        margin: 15px 0 25px 0;
     }
     
 }

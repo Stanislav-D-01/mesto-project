@@ -9,19 +9,18 @@
     padding: 0;
     grid-area: name;
     align-self: end;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
     
 }
-
-.profile__user-name:hover{
-    cursor: default;
-  }
 
 @media screen and (max-width:530px) {
     .profile__user-name{
         font-size: 27px;
         line-height: 33px;
-        margin: 26px 0 0 0;
-        justify-self: end;
+        margin: 26px 0 0 23px;
+        
         
     }
     
