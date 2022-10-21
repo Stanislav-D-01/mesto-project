@@ -13,6 +13,7 @@
     .profile__user-info{
        padding: 0;
        grid-template-columns: fit-content(320px) max-content;
+       
     }
     
 }
