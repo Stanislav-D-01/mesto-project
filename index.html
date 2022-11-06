@@ -25,71 +25,68 @@
       </section>
 
       <section class="cards">
-        <div class="cards__card">
-          <img src="./image/Dombai.jpg" alt="Домбай" class="cards__image">
-          <div class="cards__description">
-            <h2 class="cards__title">Домбай</h2>
-            <button class="cards__like" type="button"></button>
-          </div>
-        </div>
 
-        <div class="cards__card">
-          <img src="./image/Elbrus.jpg" alt="Эльбрус" class="cards__image">
-          <div class="cards__description">
-            <h2 class="cards__title">Эльбрус</h2>
-            <button class="cards__like" type="button"></button>
-          </div>
-        </div>
-
-        <div class="cards__card">
-          <img src="./image/Karachaevsk.jpg" alt="Карачаевск" class="cards__image">
-          <div class="cards__description">
-            <h2 class="cards__title">Карачаевск</h2>
-            <button class="cards__like" type="button"></button>
-          </div>
-        </div>
-
-        <div class="cards__card">
-          <img src="./image/Dombai.jpg" alt="Домбай" class="cards__image">
-          <div class="cards__description">
-            <h2 class="cards__title">Домбай</h2>
-            <button class="cards__like" type="button"></button>
-          </div>
-        </div>
-
-        <div class="cards__card">
-          <img src="./image/Dombai.jpg" alt="Домбай" class="cards__image">
-          <div class="cards__description">
-            <h2 class="cards__title">Домбай</h2>
-            <button class="cards__like" type="button"></button>
-          </div>
-        </div>
-
-        <div class="cards__card">
-          <img src="./image/Karachaevsk.jpg" alt="Карачаевск" class="cards__image">
-          <div class="cards__description">
-            <h2 class="cards__title">Карачаево-черкесия</h2>
-            <button class="cards__like" type="button"></button>
-          </div>
-        </div>
       </section>
     </main>
     <footer class="footer">
       <p class="footer__copyright">© 2022 Mesto Russia</p>
     </footer>
 
-    <div class="popup popup_opene">
+    <div class="popup">
       <div class="popup__container">
         <button class="popup__icon-close" type="button"></button>
-        <form class="popup__form-edit-user" name="edit-user">
+        <form class="popup__form" name="edit-user">
         <fieldset class="popup__card">
           <h2 class="popup__title">Редактировать профиль</h2>
           <input type="text" class="popup__input-field" value="Жак-Ив Кусто" name="name-user" placeholder="Укажите ваше имя">
           <input type="text" class="popup__input-field" value="Исследователь океана" name="about-user" placeholder="Напишите коротко о себе">
-          <button class="popup__button-save" type="button">Сохранить</button>
+          <button class="popup__button-save" type="submit">Сохранить</button>
         </fieldset>
         </form>
       </div>
     </div>
+
+    <div class="popup popup_type_add-mesto">
+      <div class="popup__container">
+        <button class="popup__icon-close" type="button"></button>
+        <form class="popup__form" name="add-new-mesto">
+        <fieldset class="popup__card">
+          <h2 class="popup__title">Новое место</h2>
+          <input type="text" class="popup__input-field" value="" name="name-new-mesto" placeholder="Название">
+          <input type="text" class="popup__input-field" value="" name="link-new-mesto" placeholder="Ссылка на картинку">
+          <button class="popup__button-save" type="submit">Создать</button>
+        </fieldset>
+        </form>
+      </div>
+    </div>
+
+    <div class="popup-views-img">
+       <div class="popup-views-img__container">
+          <button class="popup-views-img__icon-close"></button>
+          <img class="popup-views-img__img" src="../mesto/image/Karachaevsk.jpg">
+          <h2 class="popup-views-img__name-img">Карачаевск</h2>
+        </div>
+    </div>
+
+
+
+
+
+    <template id="newMesto">
+      <div class="cards__card">
+        <img class="cards__image">
+        <button class="cards__delete" type="button"></button>
+        <div class="cards__description">
+          <h2 class="cards__title"></h2>
+          <button class="cards__like" type="button"></button>
+        </div>
+      </div>
+    </template>
+
+
+
+
+
+    <script src='./scripts.js'></script>
   </body>
-</html>
+  </html>

@@ -1,0 +1,9 @@
+.popup-views-img__container{
+  max-width: 75vw;
+  max-height: 75vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  position: relative;
+
+}
