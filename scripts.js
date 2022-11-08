@@ -29,7 +29,7 @@ const buttonEditProfile = document.querySelector('.profile__edit-button');
 const popupAddMesto = document.querySelector('.add-mesto-popup');
 const formAddMesto = document.querySelector('form[name="add-new-mesto"');
 const buttonAddMesto = document.querySelector('.profile__add-button');
-const buttonClose = document.querySelectorAll('.popup__icon-close');
+const buttonsClose = document.querySelectorAll('.popup__icon-close');
 const profileUserName = document.querySelector('.profile__user-name');
 const profileUserAbout = document.querySelector('.profile__user-about');
 const formElement = document.querySelector('form[name="edit-user"');
@@ -40,6 +40,9 @@ const cards = document.querySelector('.cards');
 const nameMestoInput = document.querySelector('input[name="name-new-mesto"');
 const linkMestoInput = document.querySelector('input[name="link-new-mesto"');
 const popupViewImg = document.querySelector('.popup-views-img');
+const popupImg = document.querySelector('.popup__img');
+const popupNameImg = document.querySelector('.popup__name-img');
+
 
 function openPopup (popup) {
  popup.classList.add ('popup_opened')
@@ -49,7 +52,7 @@ function closePopup (popup) {
   popup.classList.remove ('popup_opened');
 };
 
-buttonClose.forEach((button)=>{
+buttonsClose.forEach((button)=>{
   const popup = button.closest('.popup');
   button.addEventListener('click', ()=>{closePopup(popup)});
 })
@@ -88,9 +91,9 @@ function createContainerNewMesto(nameMesto, linkMesto) { //функция фор
   })
 
   containerNewMesto.querySelector('.cards__image').addEventListener('click', function (evt) {
-    document.querySelector('.popup__img').src = linkMesto;
-    document.querySelector('.popup__img').alt = nameMesto;
-    document.querySelector('.popup__name-img').textContent = nameMesto;
+    popupImg.src = linkMesto;
+    popupImg.alt = nameMesto;
+    popupNameImg.textContent = nameMesto;
     openPopup(popupViewImg);
   });
   return containerNewMesto; //возращает готовую карточку для вставки в DOM
@@ -111,4 +114,4 @@ function handleAddMestoFormSubmit(evt) { //функция отправки с ф
 
 formAddMesto.addEventListener('submit', handleAddMestoFormSubmit);//слушатель отправки формы добавления нового места
 
-
+//:)спасибо за ревью, многое извлек для себя полезного и разобрался в чем было не совсем понятно :)
