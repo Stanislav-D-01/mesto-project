@@ -16,7 +16,7 @@
         <div class="profile__info-block">
           <img src="./image/avatar.jpg" alt="Аватарка" class="profile__avatar">
           <div class="profile__user-info">
-            <h1 class="profile__user-name">Жак-Ив Кусто</h1>
+            <h1 class="profile__user-name">Жак Кусто</h1>
             <p class="profile__user-about">Исследователь океана</p>
             <button class="profile__edit-button" type="button"></button>
           </div>
@@ -29,18 +29,20 @@
       </section>
     </main>
     <footer class="footer">
-      <p class="footer__copyright">© 2022 Mesto Russia</p>
+      <p class="footer__copyright">© 2023 Mesto Russia</p>
     </footer>
 
     <div class="popup profile-popup">
       <div class="popup__container">
         <button class="popup__icon-close" type="button"></button>
-        <form class="popup__form" name="edit-user">
+        <form class="popup__form" name="edit-user"  novalidate>
         <fieldset class="popup__card">
           <h2 class="popup__title">Редактировать профиль</h2>
-          <input type="text" class="popup__input-field" value="Жак-Ив Кусто" name="name-user" placeholder="Укажите ваше имя" required >
-          <input type="text" class="popup__input-field" value="Исследователь океана" name="about-user" placeholder="Напишите коротко о себе" required>
-          <button class="popup__button-save" type="submit">Сохранить</button>
+          <input id="input-name-user" type="text" class="popup__input-field" value="Жак-Ив Кусто" name="name-user" placeholder="Укажите ваше имя" maxlength="40" minlength="2" pattern="^[-0-9A-Za-zА-Яа-яЁё\s]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required >
+          <span class="input-name-user-error input-error"></span>
+          <input id='input-about-user' type="text" class="popup__input-field" value="Исследователь океана" name="about-user" placeholder="Напишите коротко о себе" maxlength="200" minlength="2" pattern="^[-0-9A-Za-zА-Яа-яЁё\s]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
+          <span class="input-about-user-error input-error"></span>
+          <button class="popup__button-save button-submit" type="submit">Сохранить</button>
         </fieldset>
         </form>
       </div>
@@ -52,9 +54,11 @@
         <form class="popup__form" name="add-new-mesto">
         <fieldset class="popup__card">
           <h2 class="popup__title">Новое место</h2>
-          <input type="text" class="popup__input-field" value="" name="name-new-mesto" placeholder="Название" required>
-          <input type="text" class="popup__input-field" value="" name="link-new-mesto" placeholder="Ссылка на картинку"required>
-          <button class="popup__button-save" type="submit">Создать</button>
+          <input id="input-new-mesto" type="text" class="popup__input-field" value="" name="name-new-mesto" placeholder="Название" maxlength="30" minlength="2" pattern="^[-0-9A-Za-zА-Яа-яЁё\s]+$" data-error-message="Разрешены только латинские, русские буквы, цифры и тире" required>
+          <span class="input-new-mesto-error input-error"></span>
+          <input id="input-url-new-mesto" type="url" class="popup__input-field" value="" name="link-new-mesto" placeholder="Ссылка на картинку"required>
+          <span class="input-url-new-mesto-error input-error"></span>
+          <button class="popup__button-save button-submit" type="submit">Создать</button>
         </fieldset>
         </form>
       </div>
@@ -87,6 +91,10 @@
 
 
 
-    <script src='./scripts.js'></script>
+    <script type="module" src="./src/components/index.js"></script>
+    <script type="module" src="./src/components/card.js"></script>
+    <script type="module" src="./src/components/modal.js"></script>\
+    <script type="module" src="./src/components/utils.js"></script>
+    <script type="module" src="./src/components/validate.js"></script>
   </body>
   </html>
