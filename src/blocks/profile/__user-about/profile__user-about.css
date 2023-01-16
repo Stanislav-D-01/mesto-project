@@ -1,3 +1,4 @@
+
 .profile__user-about{
   font-family: "Inter", Arial, sans-serif;
   font-style: normal;
@@ -12,7 +13,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-}
+};
 
 @media screen and (max-width:530px) {
     .profile__user-about{
@@ -20,7 +21,7 @@
         line-height: 17px;
         margin: 7px 0 0 23px;
         text-align: center;
-       
+
     }
-    
-}
+
+};

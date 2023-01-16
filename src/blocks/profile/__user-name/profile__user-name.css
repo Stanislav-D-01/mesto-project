@@ -12,16 +12,16 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    
-}
+
+};
 
 @media screen and (max-width:530px) {
     .profile__user-name{
         font-size: 27px;
         line-height: 33px;
         margin: 26px 0 0 23px;
-        
-        
+
+
     }
-    
-}
+
+};

@@ -1,0 +1,38 @@
+{
+  "name": "mesto",
+  "version": "0.0.1",
+  "description": "В проекте реализована адаптивная страница.\r На странице расположены карточеки 6 мест России подгружаеммых из массива адресов изображений.\r Страница реализована с применением технологий Flex, Grid.\r Адаптивность страницы достигается путем:\r 1.Относительных единиц измерений\r 2.Медиазапросов.\r Реализовано два модальных окна:\r 1. Редактирование профиля\r 2. Добавление фотографии нового места\r Возможно добавление фотографий. Редактирвоание Имени пользователя и профиля \"О пользователе\". Возможно удаление карточек с фотографиями путем клика на мусорный ящик.\r При клике на фотографию происходит открытие на размер 75VW/VH.\r Открытие и закрытие модальных окон, добавление фотографий, редактирование профиля? удаление и просмотр фотографик реализована на JS.",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "dev": "webpack serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stanislav-D-01/mesto-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Stanislav-D-01/mesto-project/issues"
+  },
+  "homepage": "https://github.com/Stanislav-D-01/mesto-project#readme",
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "autoprefixer": "^10.4.13",
+    "babel-loader": "^9.1.2",
+    "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^6.7.3",
+    "cssnano": "^5.1.14",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.7.2",
+    "postcss-loader": "^7.0.2",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
+  },
+  "dependencies": {
+    "core-js": "^3.27.1"
+  }
+}
