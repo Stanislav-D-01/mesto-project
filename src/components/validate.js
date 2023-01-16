@@ -1,7 +1,14 @@
-
-import { closePopup} from "./modal.js";
-
-export function checkValid (formEl, inputEl){
+export const validationVar = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input-field',
+  submitButtonSelector: '.popup__button-save',
+  inactiveButtonClass: 'popup__button-save_type_disable',
+  inputErrorClass: 'input-field_type_error',
+  errorClass: 'input-error_active',
+};
+export function enableValidation (validationVar){
+formValidation ();
+function checkValid (formEl, inputEl){
   if (inputEl.validity.patternMismatch){
     inputEl.setCustomValidity(inputEl.dataset.errorMessage);
   }else{
@@ -15,23 +22,23 @@ export function checkValid (formEl, inputEl){
   }
 };
 
-export function showInputErr (formEl, inputEl, ErrMessage){
+function showInputErr (formEl, inputEl, ErrMessage){
 const errElement = formEl.querySelector(`.${inputEl.id}-error`);
 errElement.textContent = ErrMessage;
-errElement.classList.add('input-error_active');
-inputEl.classList.add('input-field_type_error');
+errElement.classList.add(validationVar.errorClass);
+inputEl.classList.add(validationVar.inputErrorClass);
 };
 
-export function hideInputErr (formEl, inputEl){
+function hideInputErr (formEl, inputEl){
 const errElement = formEl.querySelector(`.${inputEl.id}-error`);
 errElement.textContent = '';
-errElement.classList.remove('input-error_active');
-inputEl.classList.remove('input-field_type_error');
-}
+errElement.classList.remove(validationVar.errorClass);
+inputEl.classList.remove(validationVar.inputErrorClass);
+};
 
-export function addFormListener (formEl){
-  const inputList = Array.from(formEl.querySelectorAll('.popup__input-field'));
-  const buttonEl = formEl.querySelector('.popup__button-save');
+function addFormListener (formEl){
+  const inputList = Array.from(formEl.querySelectorAll(validationVar.inputSelector));
+  const buttonEl = formEl.querySelector(validationVar.submitButtonSelector);
   toggleButton (inputList, buttonEl);
   inputList.forEach(function (inputEl){
       inputEl.addEventListener('input', () => {
@@ -42,34 +49,29 @@ export function addFormListener (formEl){
 
   };
 
-export function formValidation () {
-const formList = Array.from(document.querySelectorAll('.popup__form'));
+function formValidation () {
+const formList = Array.from(document.querySelectorAll(validationVar.formSelector));
 formList.forEach((formEl) => {
   addFormListener (formEl)
 
 });
 };
 
-export function addClosePopupEscape () {
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape'){
-      closePopup();
-    }
-  })
-};
 
-export function findInvalidInput (inputList) {
+
+function findInvalidInput (inputList) {
   return inputList.some ( (inputEl) =>
       !inputEl.validity.valid
    );
  };
 
- export function toggleButton (inputList, buttonEl) {
+function toggleButton (inputList, buttonEl) {
   if (findInvalidInput(inputList))  {
     buttonEl.disabled = true;
-    buttonEl.classList.add('popup__button-save_type_disable')
+    buttonEl.classList.add(validationVar.inactiveButtonClass)
   }else{
     buttonEl.disabled = false;
-    buttonEl.classList.remove('popup__button-save_type_disable')
-  }
-}
+    buttonEl.classList.remove(validationVar.inactiveButtonClass)
+  };
+};
+};

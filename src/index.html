@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
   <head>
-    <link rel="stylesheet" href="./pages/index.css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,12 +8,12 @@
   </head>
   <body class="page">
     <header class="header">
-      <img src="./image/Header__logo.svg" alt="Логотип Mesto" class="header__logo">
+      <img src="<%=require('./image/Header__logo.svg')%>" alt="Логотип Mesto" class="header__logo">
     </header>
     <main class="main">
       <section class="profile">
         <div class="profile__info-block">
-          <img src="./image/avatar.jpg" alt="Аватарка" class="profile__avatar">
+          <img class="profile__avatar" src="<%=require('./image/avatar.jpg')%>" alt="Аватарка">
           <div class="profile__user-info">
             <h1 class="profile__user-name">Жак Кусто</h1>
             <p class="profile__user-about">Исследователь океана</p>
@@ -67,7 +66,7 @@
     <div class="popup popup-views-img">
        <div class="popup__container popup__container_type_view-img">
           <button class="popup__icon-close"></button>
-          <img class="popup__img" src="https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg" alt="Картинка">
+          <img class="popup__img" src='' alt="Картинка">
           <h2 class="popup__name-img">Название</h2>
         </div>
     </div>
@@ -91,10 +90,6 @@
 
 
 
-    <script type="module" src="./src/components/index.js"></script>
-    <script type="module" src="./src/components/card.js"></script>
-    <script type="module" src="./src/components/modal.js"></script>\
-    <script type="module" src="./src/components/utils.js"></script>
-    <script type="module" src="./src/components/validate.js"></script>
+
   </body>
   </html>

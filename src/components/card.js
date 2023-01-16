@@ -2,6 +2,12 @@ import {openPopup, closePopup} from "./modal.js";
 
 const cards = document.querySelector('.cards');
 const templateNewMesto = document.querySelector('#newMesto');
+export const popupAddMesto = document.querySelector('.add-mesto-popup');
+export const nameMestoInput = document.querySelector('input[name="name-new-mesto"');
+export const linkMestoInput = document.querySelector('input[name="link-new-mesto"');
+const popupViewImg = document.querySelector('.popup-views-img');
+const popupImg = document.querySelector('.popup__img');
+const popupNameImg = document.querySelector('.popup__name-img');
 
 export const initialCards = [ //массив с картинками
   {
