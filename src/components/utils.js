@@ -1,14 +1,26 @@
-export const profileUserName = document.querySelector('.profile__user-name');
-export const profileUserAbout = document.querySelector('.profile__user-about');
-export const popupEditProfile = document.querySelector('.profile-popup');
-export const nameInput = document.querySelector('input[name="name-user"]');
-export const aboutInput = document.querySelector('input[name="about-user"]');
-import {closePopup} from "./modal.js";
+import { validationVar } from "./validate";
+export function showInputErr(formEl, inputEl, ErrMessage) {
+  const errElement = formEl.querySelector(`.${inputEl.id}-error`);
+  errElement.textContent = ErrMessage;
+  errElement.classList.add(validationVar.errorClass);
+  inputEl.classList.add(validationVar.inputErrorClass);
+}
 
+export function hideInputErr(formEl, inputEl) {
+  const errElement = formEl.querySelector(`.${inputEl.id}-error`);
+  errElement.textContent = "";
+  errElement.classList.remove(validationVar.errorClass);
+  inputEl.classList.remove(validationVar.inputErrorClass);
+}
 
-export function handleProfileFormSubmit(evt) { //функция заменяющая стандартную отправку формы
-  evt.preventDefault();
-  profileUserName.textContent = nameInput.value;
-  profileUserAbout.textContent = aboutInput.value;
-  closePopup(popupEditProfile);
-};
+export function resetError(formEl) {
+  const inputList = Array.from(
+    formEl.querySelectorAll(validationVar.inputSelector)
+  );
+  const buttonEl = formEl.querySelector(validationVar.submitButtonSelector);
+  inputList.forEach((inputEl) => {
+    hideInputErr(formEl, inputEl);
+  });
+  buttonEl.disabled = true;
+  buttonEl.classList.add(validationVar.inactiveButtonClass);
+}
