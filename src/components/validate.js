@@ -1,5 +1,3 @@
-import { showInputErr, hideInputErr } from "./utils.js";
-
 export const validationVar = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input-field",
@@ -41,9 +39,20 @@ export function enableValidation(validationVar) {
       inputEl.setCustomValidity("");
     }
     if (inputEl.validity.valid === false) {
-      showInputErr(formEl, inputEl, inputEl.validationMessage);
+      showInputErr(
+        formEl,
+        inputEl,
+        inputEl.validationMessage,
+        validationVar.errorClass,
+        validationVar.inputErrorClass
+      );
     } else {
-      hideInputErr(formEl, inputEl);
+      hideInputErr(
+        formEl,
+        inputEl,
+        validationVar.errorClass,
+        validationVar.inputErrorClass
+      );
     }
   }
 
@@ -53,23 +62,55 @@ export function enableValidation(validationVar) {
 
   function toggleButton(inputList, buttonEl) {
     if (findInvalidInput(inputList)) {
-      buttonEl.disabled = true;
+      disableSubmitButton(buttonEl);
       buttonEl.classList.add(validationVar.inactiveButtonClass);
     } else {
       buttonEl.disabled = false;
       buttonEl.classList.remove(validationVar.inactiveButtonClass);
     }
   }
+}
 
-  function resetError(formEl, config) {
-    const inputList = Array.from(
-      formElement.querySelectorAll(config.inputSelector)
+function showInputErr(
+  formEl,
+  inputEl,
+  ErrMessage,
+  classErrorActive,
+  classInputError
+) {
+  const errElement = formEl.querySelector(`.${inputEl.id}-error`);
+  errElement.textContent = ErrMessage;
+  errElement.classList.add(classErrorActive);
+  inputEl.classList.add(classInputError);
+}
+
+function hideInputErr(formEl, inputEl, classErrorActive, classInputError) {
+  const errElement = formEl.querySelector(`.${inputEl.id}-error`);
+  errElement.textContent = "";
+  errElement.classList.remove(classErrorActive);
+  inputEl.classList.remove(classInputError);
+}
+
+export function resetError(
+  formEl,
+  inputSelector,
+  submitButtonSelector,
+  inactiveButtonClass
+) {
+  const inputList = Array.from(formEl.querySelectorAll(inputSelector));
+  const buttonEl = formEl.querySelector(submitButtonSelector);
+  inputList.forEach((inputEl) => {
+    hideInputErr(
+      formEl,
+      inputEl,
+      validationVar.errorClass,
+      validationVar.inputErrorClass
     );
-    // очищаем ошибки валидации
-    inputList.forEach((inputElement) =>
-      hideInputError(formElement, inputElement, config)
-    );
-    // актуализируем состояние кнопки сабмита
-    toggleButtonState(formElement, inputList, config);
-  }
+  });
+  disableSubmitButton(buttonEl);
+  buttonEl.classList.add(inactiveButtonClass);
+}
+
+function disableSubmitButton(buttonElement) {
+  buttonElement.disabled = true;
 }

@@ -1,5 +1,5 @@
 import "../pages/index.css";
-import { enableValidation, validationVar } from "./validate.js";
+import { enableValidation, validationVar, resetError } from "./validate.js";
 import { openPopup, closePopup, addListenerPopup } from "./modal.js";
 import {
   pastNewMesto,
@@ -45,12 +45,24 @@ buttonEditProfile.addEventListener("click", () => {
   nameInput.value = profileUserName.textContent;
   aboutInput.value = profileUserAbout.textContent;
   openPopup(popupEditProfile);
+  resetError(
+    popupEditProfile,
+    validationVar.inputSelector,
+    validationVar.submitButtonSelector,
+    validationVar.inactiveButtonClass
+  );
 });
 
 buttonAddMesto.addEventListener("click", () => {
   nameMestoInput.value = "";
   linkMestoInput.value = "";
   openPopup(popupAddMesto);
+  resetError(
+    popupAddMesto,
+    validationVar.inputSelector,
+    validationVar.submitButtonSelector,
+    validationVar.inactiveButtonClass
+  );
 });
 
 initialCards.forEach((elem) => {

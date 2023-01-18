@@ -1,10 +1,8 @@
-import { resetError } from "./utils";
 const listPopup = document.querySelectorAll(".popup");
 
 export function openPopup(popup) {
   popup.classList.add("popup_opened");
   document.addEventListener("keydown", checkKeyEscape);
-  resetError(popup);
 }
 
 export function closePopup() {
@@ -29,5 +27,3 @@ export function checkKeyEscape(evt) {
     closePopup();
   }
 }
-
-export function removeClosePopupEscape() {}
