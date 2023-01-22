@@ -8,9 +8,11 @@ import {
   linkMestoInput,
   popupAddMesto,
   cardsContainer,
+  loadCards,
+  initialCards,
 } from "./card.js";
 
-import { initialCards } from "./initial-cards";
+import { loadName, loadAbout, loadAvatar } from "./loadInfoData";
 
 const formAddMesto = document.querySelector("form[name=add-new-mesto]");
 const buttonAddMesto = document.querySelector(".profile__add-button");
@@ -18,14 +20,18 @@ const buttonEditProfile = document.querySelector(".profile__edit-button");
 const buttonsClose = document.querySelectorAll(".popup__icon-close");
 const formEditUser = document.querySelector('form[name="edit-user"]');
 const buttonSaveMesto = popupAddMesto.querySelector(".popup__button-save");
-const profileUserName = document.querySelector(".profile__user-name");
-const profileUserAbout = document.querySelector(".profile__user-about");
+export const profileUserName = document.querySelector(".profile__user-name");
+export const profileUserAbout = document.querySelector(".profile__user-about");
 const popupEditProfile = document.querySelector(".profile-popup");
 const nameInput = document.querySelector("input[name=name-user]");
 const aboutInput = document.querySelector("input[name=about-user]");
 
 enableValidation(validationVar);
 addListenerPopup();
+loadName();
+loadAbout();
+loadAvatar();
+loadCards();
 
 function handleProfileFormSubmit(evt) {
   //функция заменяющая стандартную отправку формы

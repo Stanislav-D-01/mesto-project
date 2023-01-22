@@ -12,6 +12,7 @@ export const linkMestoInput = document.querySelector(
 const popupViewImg = document.querySelector(".popup-views-img");
 const popupImg = document.querySelector(".popup__img");
 const popupNameImg = document.querySelector(".popup__name-img");
+export let initialCards = [];
 
 export function createContainerNewMesto(nameMesto, linkMesto) {
   //функция формирует из template карточку места с добавлением слушаетелей кликов на иконку удаления, клик по картинке для просмотра и клик лайка
@@ -53,4 +54,19 @@ export function handleAddMestoFormSubmit(evt) {
   evt.preventDefault();
   pastNewMesto(nameMestoInput.value, linkMestoInput.value, cardsContainer);
   closePopup(popupAddMesto);
+}
+
+export function loadCards() {
+  fetch("https://nomoreparties.co/v1/plus-cohort-19/cards", {
+    headers: {
+      authorization: "2c7584da-c4c4-46ef-a185-6ffbe2e069d4",
+    },
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      initialCards = data;
+      console.log(initialCards);
+    });
 }
