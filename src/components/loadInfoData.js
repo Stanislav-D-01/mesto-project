@@ -1,5 +1,6 @@
 import { profileUserAbout, profileUserName } from "./index.js";
 const profileAvatar = document.querySelector(".profile__avatar");
+export let idUser = "";
 
 export function loadName() {
   profileUserName.textContent = "Load...";
@@ -13,6 +14,7 @@ export function loadName() {
     })
     .then((data) => {
       profileUserName.textContent = data.name;
+      idUser = data._id;
     })
     .catch((err) => {
       profileUserName.textContent = "Ошибка загрузки имени";

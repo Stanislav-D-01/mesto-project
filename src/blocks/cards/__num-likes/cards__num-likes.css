@@ -1,0 +1,10 @@
+.cards__num-likes {
+  font-family: "Inter", Arial, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  grid-area: numLike;
+  text-align: center;
+  margin: 0 20px 0 0;
+}
