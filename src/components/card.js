@@ -37,11 +37,13 @@ export function createContainerNewMesto(
     for (let i = 0; i < arrLikes.length; i++) {
       if (arrLikes[i]._id == idUser) {
         buttonLike.classList.add("cards__like_active");
+        console.log("true+++");
         break;
       }
     }
   }
-  //проверка на наличие своих карточек, если есть показываем кнопку удалить
+
+  //проверка на наличие своих карточек, если есть - отображаем кнопку удалить
 
   if (idUserCard == idUser) {
     buttonDelete.classList.add("cards__delete_visible");
@@ -79,7 +81,6 @@ export function createContainerNewMesto(
           evt.target.classList.add("cards__like_active");
         });
     }
-    // evt.target.classList.toggle("cards__like_active");
   });
   containerNewMesto
     .querySelector(".cards__delete")
@@ -161,7 +162,7 @@ export function loadCards() {
     })
     .then((initialCards) => {
       const lengthInitialCards = initialCards.length;
-      console.log(initialCards);
+
       for (let i = 0; i < lengthInitialCards; i++) {
         pastNewMesto(
           initialCards[lengthInitialCards - i - 1].name,

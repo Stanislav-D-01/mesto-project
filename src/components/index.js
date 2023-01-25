@@ -1,6 +1,7 @@
 import "../pages/index.css";
 import { enableValidation, validationVar, resetError } from "./validate.js";
 import { openPopup, closePopup, addListenerPopup } from "./modal.js";
+import { loadName, loadAbout, loadAvatar } from "./loadInfoData.js";
 import {
   handleAddMestoFormSubmit,
   nameMestoInput,
@@ -8,8 +9,6 @@ import {
   popupAddMesto,
   loadCards,
 } from "./card.js";
-
-import { loadName, loadAbout, loadAvatar } from "./loadInfoData";
 
 const formAddMesto = document.querySelector("form[name=add-new-mesto]");
 const buttonAddMesto = document.querySelector(".profile__add-button");
@@ -35,7 +34,7 @@ addListenerPopup();
 loadName();
 loadAbout();
 loadAvatar();
-loadCards();
+
 function handleProfileFormSubmit(evt) {
   //функция заменяющая стандартную отправку формы
   const button = formEditUser.querySelector(".popup__button-save");
