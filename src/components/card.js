@@ -1,7 +1,5 @@
-import { openPopup, closePopup } from "./modal.js";
-import { idUser } from "./loadInfoData.js";
-
-export const cardsContainer = document.querySelector(".cards");
+import { openPopup } from "./modal.js";
+import { idUser, deleteLike, addlike, deleteCard } from "./api.js";
 const templateNewMesto = document.querySelector("#newMesto");
 export const popupAddMesto = document.querySelector(".add-mesto-popup");
 export const nameMestoInput = document.querySelector(
@@ -37,62 +35,27 @@ export function createContainerNewMesto(
     for (let i = 0; i < arrLikes.length; i++) {
       if (arrLikes[i]._id == idUser) {
         buttonLike.classList.add("cards__like_active");
-        console.log("true+++");
         break;
       }
     }
   }
-
   //проверка на наличие своих карточек, если есть - отображаем кнопку удалить
-
   if (idUserCard == idUser) {
     buttonDelete.classList.add("cards__delete_visible");
   }
 
   buttonLike.addEventListener("click", function (evt) {
     if (buttonLike.matches(".cards__like_active")) {
-      fetch(
-        `https://nomoreparties.co/v1/plus-cohort-19/cards/likes/${cardId}`,
-        {
-          method: "DELETE",
-          headers: {
-            authorization: "2c7584da-c4c4-46ef-a185-6ffbe2e069d4",
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          numLikes.textContent = data.likes.length;
-          evt.target.classList.remove("cards__like_active");
-        });
+      deleteLike(evt, numLikes, cardId);
     } else {
-      fetch(
-        `https://nomoreparties.co/v1/plus-cohort-19/cards/likes/${cardId}`,
-        {
-          method: "PUT",
-          headers: {
-            authorization: "2c7584da-c4c4-46ef-a185-6ffbe2e069d4",
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          numLikes.textContent = data.likes.length;
-          evt.target.classList.add("cards__like_active");
-        });
+      addlike(evt, numLikes, cardId);
     }
   });
+
   containerNewMesto
     .querySelector(".cards__delete")
     .addEventListener("click", function (evt) {
-      fetch(`https://nomoreparties.co/v1/plus-cohort-19/cards/${cardId}`, {
-        method: "DELETE",
-        headers: {
-          authorization: "2c7584da-c4c4-46ef-a185-6ffbe2e069d4",
-        },
-      }).then(() => {
-        evt.target.parentElement.remove();
-      });
+      deleteCard(evt, cardId);
     });
 
   containerNewMesto
@@ -118,60 +81,4 @@ export function pastNewMesto(
   cardsContainer.prepend(
     createContainerNewMesto(nameMesto, linkMesto, cardId, arrLikes, idUserCard)
   );
-}
-
-export function handleAddMestoFormSubmit(evt) {
-  //функция отправки с формы добавления места
-  evt.preventDefault();
-  fetch("https://nomoreparties.co/v1/plus-cohort-19/cards", {
-    method: "POST",
-    headers: {
-      authorization: "2c7584da-c4c4-46ef-a185-6ffbe2e069d4",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: nameMestoInput.value,
-      link: linkMestoInput.value,
-    }),
-  })
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      pastNewMesto(
-        data.name,
-        data.link,
-        cardsContainer,
-        data._id,
-        [],
-        data.owner._id
-      );
-    });
-
-  closePopup(popupAddMesto);
-}
-
-export function loadCards() {
-  fetch("https://nomoreparties.co/v1/plus-cohort-19/cards", {
-    headers: {
-      authorization: "2c7584da-c4c4-46ef-a185-6ffbe2e069d4",
-    },
-  })
-    .then((res) => {
-      return res.json();
-    })
-    .then((initialCards) => {
-      const lengthInitialCards = initialCards.length;
-
-      for (let i = 0; i < lengthInitialCards; i++) {
-        pastNewMesto(
-          initialCards[lengthInitialCards - i - 1].name,
-          initialCards[lengthInitialCards - i - 1].link,
-          cardsContainer,
-          initialCards[lengthInitialCards - i - 1]._id,
-          initialCards[lengthInitialCards - i - 1].likes,
-          initialCards[lengthInitialCards - i - 1].owner._id
-        );
-      }
-    });
 }
