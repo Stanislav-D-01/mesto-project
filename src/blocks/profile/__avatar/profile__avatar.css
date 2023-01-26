@@ -1,8 +1,13 @@
 .profile__avatar {
-   max-width: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    padding: 3.75px 26.25px 3.75px 22.5;
-    grid-area: avatar;
-    align-self: center;
-};
+  max-width: 120px;
+  max-height: 120px;
+  height: 100vh;
+  border-radius: 100%;
+  object-fit: cover;
+  padding: 3.75px 26.25px 3.75px 22.5;
+  grid-area: avatar;
+  align-self: center;
+  position: relative;
+  z-index: 0;
+  border: 0;
+}

@@ -1,41 +1,53 @@
 import "../pages/index.css";
 import { enableValidation, validationVar, resetError } from "./validate.js";
 import { openPopup, closePopup, addListenerPopup } from "./modal.js";
+
+import { nameMestoInput, linkMestoInput, popupAddMesto } from "./card.js";
 import {
-  pastNewMesto,
+  handleProfileFormSubmit,
   handleAddMestoFormSubmit,
-  nameMestoInput,
-  linkMestoInput,
-  popupAddMesto,
-  cardsContainer,
-} from "./card.js";
+  loadName,
+  loadAbout,
+  loadAvatar,
+  reloadAvatar,
+} from "./api";
 
-import { initialCards } from "./initial-cards";
-
-const formAddMesto = document.querySelector("form[name=add-new-mesto]");
+export const formAddMesto = document.querySelector("form[name=add-new-mesto]");
 const buttonAddMesto = document.querySelector(".profile__add-button");
 const buttonEditProfile = document.querySelector(".profile__edit-button");
 const buttonsClose = document.querySelectorAll(".popup__icon-close");
 const formEditUser = document.querySelector('form[name="edit-user"]');
 const buttonSaveMesto = popupAddMesto.querySelector(".popup__button-save");
-const profileUserName = document.querySelector(".profile__user-name");
-const profileUserAbout = document.querySelector(".profile__user-about");
-const popupEditProfile = document.querySelector(".profile-popup");
+export const profileUserName = document.querySelector(".profile__user-name");
+export const profileUserAbout = document.querySelector(".profile__user-about");
+export const popupEditProfile = document.querySelector(".profile-popup");
 const nameInput = document.querySelector("input[name=name-user]");
 const aboutInput = document.querySelector("input[name=about-user]");
+export const popupEditAvatar = document.querySelector(".avatar-popup");
+const formEditAvatar = document.querySelector("form[name=edit-avatar]");
+const newAvatarInput = formEditAvatar.querySelector(
+  "input[name=input-link-avatar]"
+);
+const avatarImg = document.querySelector(".profile__avatar");
+const buttonNewAvatar = document.querySelector(".profile__button-avatar-edit");
 
 enableValidation(validationVar);
 addListenerPopup();
+loadName(profileUserName);
+loadAbout(profileUserAbout);
+loadAvatar(avatarImg);
 
-function handleProfileFormSubmit(evt) {
-  //функция заменяющая стандартную отправку формы
+formEditUser.addEventListener("submit", (evt) => {
   evt.preventDefault();
-  profileUserName.textContent = nameInput.value;
-  profileUserAbout.textContent = aboutInput.value;
-  closePopup(popupEditProfile);
-}
-
-formEditUser.addEventListener("submit", handleProfileFormSubmit);
+  console.log("ok");
+  handleProfileFormSubmit(
+    nameInput,
+    aboutInput,
+    formEditUser,
+    profileUserName,
+    profileUserAbout
+  );
+});
 
 buttonsClose.forEach((button) => {
   button.addEventListener("click", closePopup);
@@ -65,8 +77,23 @@ buttonAddMesto.addEventListener("click", () => {
   );
 });
 
-initialCards.forEach((elem) => {
-  pastNewMesto(elem.name, elem.link, cardsContainer);
+formAddMesto.addEventListener("submit", (evt) => {
+  evt.preventDefault();
+  handleAddMestoFormSubmit(nameMestoInput, linkMestoInput);
 });
 
-formAddMesto.addEventListener("submit", handleAddMestoFormSubmit); //слушатель отправки формы добавления нового места
+buttonNewAvatar.addEventListener("click", () => {
+  newAvatarInput.value = "";
+  openPopup(popupEditAvatar);
+  resetError(
+    popupEditAvatar,
+    validationVar.inputSelector,
+    validationVar.submitButtonSelector,
+    validationVar.inactiveButtonClass
+  );
+});
+
+formEditAvatar.addEventListener("submit", (evt) => {
+  evt.preventDefault();
+  reloadAvatar(formEditAvatar, newAvatarInput, avatarImg);
+});

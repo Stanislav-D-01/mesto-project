@@ -17,14 +17,18 @@
     <main class="main">
       <section class="profile">
         <div class="profile__info-block">
+
+         <button class="profile__button-avatar-edit" type="button">
           <img
             class="profile__avatar"
-            src="<%=require('./image/avatar.jpg')%>"
+            src="<%=require('./image/loading.gif')%>"
             alt="Аватарка"
           />
+        </button>
+
           <div class="profile__user-info">
-            <h1 class="profile__user-name">Жак Кусто</h1>
-            <p class="profile__user-about">Исследователь океана</p>
+            <h1 class="profile__user-name"></h1>
+            <p class="profile__user-about"></p>
             <button class="profile__edit-button" type="button"></button>
           </div>
         </div>
@@ -80,7 +84,7 @@
     </div>
 
     <div class="popup add-mesto-popup">
-      <div class="popup__container">
+      <div class="popup__container ">
         <button class="popup__icon-close" type="button"></button>
         <form class="popup__form" name="add-new-mesto" novalidate>
           <fieldset class="popup__card">
@@ -125,6 +129,29 @@
       </div>
     </div>
 
+    <div class="popup avatar-popup">
+      <div class="popup__container ">
+        <button class="popup__icon-close" type="button"></button>
+        <form class="popup__form" name="edit-avatar" novalidate>
+          <fieldset class="popup__card popup__card_type_new-avatar">
+            <h2 class="popup__title">Обновить аватар</h2>
+            <input
+              id="input-link-avatar"
+              type="url"
+              class="popup__input-field"
+              value=""
+              name="input-link-avatar"
+              placeholder="Введите ссылку на новый аватар"
+               required
+            />
+            <span class="input-link-avatar-error input-error"></span>
+            <button class="popup__button-save button-submit" type="submit">
+              Сохранить
+            </button>
+          </fieldset>
+        </form>
+      </div>
+    </div>
     <template id="newMesto">
       <div class="cards__card">
         <img class="cards__image" />
@@ -132,8 +159,11 @@
         <div class="cards__description">
           <h2 class="cards__title"></h2>
           <button class="cards__like" type="button"></button>
-        </div>
+          <div class='cards__num-likes'>
+            0
+            </div>
       </div>
+
     </template>
   </body>
 </html>
