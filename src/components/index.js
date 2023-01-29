@@ -2,15 +2,22 @@ import "../pages/index.css";
 import { enableValidation, validationVar, resetError } from "./validate.js";
 import { openPopup, closePopup, addListenerPopup } from "./modal.js";
 
-import { nameMestoInput, linkMestoInput, popupAddMesto } from "./card.js";
 import {
-  handleProfileFormSubmit,
-  handleAddMestoFormSubmit,
-  loadName,
-  loadAbout,
+  nameMestoInput,
+  linkMestoInput,
+  popupAddMesto,
+  pastNewMesto,
+  cardsContainer,
+} from "./card.js";
+import {
   loadAvatar,
   reloadAvatar,
+  getUserInfo,
+  getCards,
+  postNewCard,
+  patchProfile,
 } from "./api";
+import { renderLoading } from "./utils";
 
 export const formAddMesto = document.querySelector("form[name=add-new-mesto]");
 const buttonAddMesto = document.querySelector(".profile__add-button");
@@ -30,23 +37,48 @@ const newAvatarInput = formEditAvatar.querySelector(
 );
 const avatarImg = document.querySelector(".profile__avatar");
 const buttonNewAvatar = document.querySelector(".profile__button-avatar-edit");
-
+export let idUser = "";
+let initialCards = {};
+const buttonSaveProfile = formEditUser.querySelector(".popup__button-save");
+const buttonSaveAvatar = popupEditAvatar.querySelector(".popup__button-save");
 enableValidation(validationVar);
 addListenerPopup();
-loadName(profileUserName);
-loadAbout(profileUserAbout);
-loadAvatar(avatarImg);
+
+Promise.all([getUserInfo(), loadAvatar(), getCards()])
+  .then(([userInfo, avatar, cards]) => {
+    profileUserName.textContent = userInfo.name;
+    profileUserAbout.textContent = userInfo.about;
+    idUser = userInfo._id;
+    avatarImg.src = avatar.avatar;
+    initialCards = cards;
+    for (let i = 0; i < initialCards.length; i++) {
+      pastNewMesto(
+        initialCards[initialCards.length - i - 1].name,
+        initialCards[initialCards.length - i - 1].link,
+        cardsContainer,
+        initialCards[initialCards.length - i - 1]._id,
+        initialCards[initialCards.length - i - 1].likes,
+        initialCards[initialCards.length - i - 1].owner._id
+      );
+    }
+  })
+  .catch((err) => console.log(err));
 
 formEditUser.addEventListener("submit", (evt) => {
   evt.preventDefault();
-  console.log("ok");
-  handleProfileFormSubmit(
-    nameInput,
-    aboutInput,
-    formEditUser,
-    profileUserName,
-    profileUserAbout
-  );
+  renderLoading("Сохранение", "Сохранить", true, buttonSaveProfile);
+  patchProfile(nameInput, aboutInput)
+    .then((data) => {
+      profileUserName.textContent = data.name;
+      profileUserAbout.textContent = data.about;
+      closePopup(popupEditProfile);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() =>
+      renderLoading("Сохранение...", "Сохранить", false, buttonSaveProfile)
+    );
 });
 
 buttonsClose.forEach((button) => {
@@ -79,7 +111,25 @@ buttonAddMesto.addEventListener("click", () => {
 
 formAddMesto.addEventListener("submit", (evt) => {
   evt.preventDefault();
-  handleAddMestoFormSubmit(nameMestoInput, linkMestoInput);
+  renderLoading("Сохранение...", "Создать", true, buttonSaveMesto);
+  postNewCard(nameMestoInput, linkMestoInput)
+    .then((data) => {
+      pastNewMesto(
+        data.name,
+        data.link,
+        cardsContainer,
+        data._id,
+        [],
+        data.owner._id
+      );
+      closePopup(popupAddMesto);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() =>
+      renderLoading("Сохранение...", "Создать", false, buttonSaveMesto)
+    );
 });
 
 buttonNewAvatar.addEventListener("click", () => {
@@ -95,5 +145,16 @@ buttonNewAvatar.addEventListener("click", () => {
 
 formEditAvatar.addEventListener("submit", (evt) => {
   evt.preventDefault();
-  reloadAvatar(formEditAvatar, newAvatarInput, avatarImg);
+  renderLoading("Сохранение...", "Сохранить", true, buttonSaveAvatar);
+  reloadAvatar(newAvatarInput)
+    .then((data) => {
+      avatarImg.src = data.avatar;
+      closePopup(popupEditAvatar);
+    })
+    .catch((res) => {
+      console.log(res);
+    })
+    .finally(() =>
+      renderLoading("Сохранение...", "Сохранить", false, buttonSaveAvatar)
+    );
 });

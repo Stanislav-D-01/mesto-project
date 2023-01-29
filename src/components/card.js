@@ -1,5 +1,6 @@
 import { openPopup } from "./modal.js";
-import { idUser, deleteLike, addlike, deleteCard } from "./api.js";
+import { deleteLike, addlike, deleteCard } from "./api.js";
+import { idUser } from "./index.js";
 const templateNewMesto = document.querySelector("#newMesto");
 export const popupAddMesto = document.querySelector(".add-mesto-popup");
 export const nameMestoInput = document.querySelector(
@@ -8,10 +9,10 @@ export const nameMestoInput = document.querySelector(
 export const linkMestoInput = document.querySelector(
   "input[name=link-new-mesto]"
 );
+export const cardsContainer = document.querySelector(".cards");
 const popupViewImg = document.querySelector(".popup-views-img");
 const popupImg = document.querySelector(".popup__img");
 const popupNameImg = document.querySelector(".popup__name-img");
-export let initialCards = [];
 
 export function createContainerNewMesto(
   nameMesto,
@@ -46,16 +47,38 @@ export function createContainerNewMesto(
 
   buttonLike.addEventListener("click", function (evt) {
     if (buttonLike.matches(".cards__like_active")) {
-      deleteLike(evt, numLikes, cardId);
+      deleteLike(cardId)
+        .then((data) => {
+          numLikes.textContent = data.likes.length;
+          evt.target.classList.remove("cards__like_active");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
-      addlike(evt, numLikes, cardId);
+      addlike(cardId)
+        .then((data) => {
+          numLikes.textContent = data.likes.length;
+          evt.target.classList.add("cards__like_active");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   });
 
   containerNewMesto
     .querySelector(".cards__delete")
     .addEventListener("click", function (evt) {
-      deleteCard(evt, cardId);
+      deleteCard(cardId)
+        .then((res) => {
+          if (res.ok) {
+            evt.target.parentElement.remove();
+          } else return Promise.reject(`Ошибка:%{res.status}`);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     });
 
   containerNewMesto
