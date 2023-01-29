@@ -43,9 +43,11 @@ module.exports = {
       },
     ],
   },
+  devtool: "inline-source-map",
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/index.html",
+      title: "Development",
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin(),
