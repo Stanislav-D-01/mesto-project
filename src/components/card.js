@@ -1,6 +1,6 @@
 import { openPopup } from "./modal.js";
 import { deleteLike, addlike, deleteCard } from "./api.js";
-import { idUser } from "./index.js";
+import { idUser, toggleLike } from "./index.js";
 const templateNewMesto = document.querySelector("#newMesto");
 export const popupAddMesto = document.querySelector(".add-mesto-popup");
 export const nameMestoInput = document.querySelector(
@@ -47,23 +47,9 @@ export function createContainerNewMesto(
 
   buttonLike.addEventListener("click", function (evt) {
     if (buttonLike.matches(".cards__like_active")) {
-      deleteLike(cardId)
-        .then((data) => {
-          numLikes.textContent = data.likes.length;
-          evt.target.classList.remove("cards__like_active");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      toggleLike("del", cardId, evt, numLikes);
     } else {
-      addlike(cardId)
-        .then((data) => {
-          numLikes.textContent = data.likes.length;
-          evt.target.classList.add("cards__like_active");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      toggleLike("add", cardId, evt, numLikes);
     }
   });
 

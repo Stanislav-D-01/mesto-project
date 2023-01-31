@@ -35,7 +35,7 @@ export function deleteLike(cardId) {
   });
 }
 
-export function addlike(cardId) {
+export function addLike(cardId) {
   return fetch(`${config.likesUrl}/${cardId}`, {
     method: "PUT",
     headers: config.headers,
