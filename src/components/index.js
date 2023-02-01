@@ -16,6 +16,8 @@ import {
   getCards,
   postNewCard,
   patchProfile,
+  addLike,
+  deleteLike,
 } from "./api";
 import { renderLoading } from "./utils";
 
@@ -158,3 +160,26 @@ formEditAvatar.addEventListener("submit", (evt) => {
       renderLoading("Сохранение...", "Сохранить", false, buttonSaveAvatar)
     );
 });
+
+export function toggleLike(status, cardId, evt, numLikes) {
+  if (status == "del") {
+    deleteLike(cardId)
+      .then((data) => {
+        numLikes.textContent = data.likes.length;
+        evt.target.classList.remove("cards__like_active");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  if (status == "add") {
+    addLike(cardId)
+      .then((data) => {
+        numLikes.textContent = data.likes.length;
+        evt.target.classList.add("cards__like_active");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+}

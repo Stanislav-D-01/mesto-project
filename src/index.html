@@ -17,14 +17,13 @@
     <main class="main">
       <section class="profile">
         <div class="profile__info-block">
-
-         <button class="profile__button-avatar-edit" type="button">
-          <img
-            class="profile__avatar"
-            src="<%=require('./image/loading.gif')%>"
-            alt="Аватарка"
-          />
-        </button>
+          <button class="profile__button-avatar-edit" type="button">
+            <img
+              class="profile__avatar"
+              src="<%=require('./image/loading.gif')%>"
+              alt="Аватарка"
+            />
+          </button>
 
           <div class="profile__user-info">
             <h1 class="profile__user-name"></h1>
@@ -60,6 +59,7 @@
               data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
               required
             />
+
             <span class="input-name-user-error input-error"></span>
             <input
               id="input-about-user"
@@ -84,7 +84,7 @@
     </div>
 
     <div class="popup add-mesto-popup">
-      <div class="popup__container ">
+      <div class="popup__container">
         <button class="popup__icon-close" type="button"></button>
         <form class="popup__form" name="add-new-mesto" novalidate>
           <fieldset class="popup__card">
@@ -130,7 +130,7 @@
     </div>
 
     <div class="popup avatar-popup">
-      <div class="popup__container ">
+      <div class="popup__container">
         <button class="popup__icon-close" type="button"></button>
         <form class="popup__form" name="edit-avatar" novalidate>
           <fieldset class="popup__card popup__card_type_new-avatar">
@@ -142,7 +142,7 @@
               value=""
               name="input-link-avatar"
               placeholder="Введите ссылку на новый аватар"
-               required
+              required
             />
             <span class="input-link-avatar-error input-error"></span>
             <button class="popup__button-save button-submit" type="submit">
@@ -159,11 +159,9 @@
         <div class="cards__description">
           <h2 class="cards__title"></h2>
           <button class="cards__like" type="button"></button>
-          <div class='cards__num-likes'>
-            0
-            </div>
+          <div class="cards__num-likes">0</div>
+        </div>
       </div>
-
     </template>
   </body>
 </html>
