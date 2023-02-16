@@ -1,15 +1,24 @@
 import { checkResponse } from "./utils";
 
-const config = {
-  baseUrl: "https://nomoreparties.co/v1/plus-cohort-19/users/me",
-  cardsUrl: "https://nomoreparties.co/v1/plus-cohort-19/cards",
-  likesUrl: "https://nomoreparties.co/v1/plus-cohort-19/cards/likes",
-  avatarUrl: "https://nomoreparties.co/v1/plus-cohort-19/users/me/avatar",
-  headers: {
-    authorization: "2c7584da-c4c4-46ef-a185-6ffbe2e069d4",
-  },
-};
+export class Api {
+  constructor(config) {
+    this._baseUrl = config.baseUrl;
+    this._cardsUrl = config.cardsUrl;
+    this._likesUrl = config.likesUrl;
+    this._avatarUrl = config.avatar;
+    this._headers = config.headers;
+  }
 
+  _getUserInfo() {
+    return fetch(this._baseUrl, {
+      headers: this._headers,
+    }).then((res) => {
+      return checkResponse(res);
+    });
+  }
+}
+
+/**
 export function getUserInfo() {
   return fetch(config.baseUrl, {
     headers: config.headers,
@@ -105,3 +114,4 @@ export function reloadAvatar(newAvatarInput) {
     return checkResponse(res);
   });
 }
+*/

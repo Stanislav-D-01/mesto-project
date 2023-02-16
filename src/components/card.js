@@ -1,6 +1,6 @@
 import { openPopup } from "./modal.js";
-import { deleteLike, addlike, deleteCard } from "./api.js";
-import { idUser, toggleLike } from "./index.js";
+//import { deleteLike, addlike, deleteCard } from "./api.js";
+//import { idUser, toggleLike } from "./index.js";
 const templateNewMesto = document.querySelector("#newMesto");
 export const popupAddMesto = document.querySelector(".add-mesto-popup");
 export const nameMestoInput = document.querySelector(

@@ -1,6 +1,7 @@
 import "../pages/index.css";
 import { enableValidation, validationVar, resetError } from "./validate.js";
 import { openPopup, closePopup, addListenerPopup } from "./modal.js";
+import { checkResponse } from "./utils";
 
 import {
   nameMestoInput,
@@ -18,9 +19,11 @@ import {
   patchProfile,
   addLike,
   deleteLike,
-} from "./api";
+  Api,
+} from "./api.js";
 import { renderLoading } from "./utils";
 
+import { config } from "./varibles.js";
 export const formAddMesto = document.querySelector("form[name=add-new-mesto]");
 const buttonAddMesto = document.querySelector(".profile__add-button");
 const buttonEditProfile = document.querySelector(".profile__edit-button");
@@ -46,6 +49,17 @@ const buttonSaveAvatar = popupEditAvatar.querySelector(".popup__button-save");
 enableValidation(validationVar);
 addListenerPopup();
 
+const api = new Api(config);
+
+api
+  ._getUserInfo()
+
+  .then((data) => {
+    profileUserName.textContent = data.name;
+    profileUserAbout.textContent = data.about;
+  });
+
+/**
 Promise.all([getUserInfo(), loadAvatar(), getCards()])
   .then(([userInfo, avatar, cards]) => {
     profileUserName.textContent = userInfo.name;
@@ -183,3 +197,4 @@ export function toggleLike(status, cardId, evt, numLikes) {
       });
   }
 }
+*/
