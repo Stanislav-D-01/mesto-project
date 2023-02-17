@@ -9,11 +9,27 @@ export class Api {
     this._headers = config.headers;
   }
 
-  _getUserInfo() {
+  _checkResponse(res) {
+    if (res.ok) {
+      return res.json();
+    } else {
+      return Promise.reject(`Ошибка ${res.status}`);
+    }
+  }
+
+  getUserInfo() {
     return fetch(this._baseUrl, {
       headers: this._headers,
     }).then((res) => {
-      return checkResponse(res);
+      return this._checkResponse(res);
+    });
+  }
+
+  loadAvatar() {
+    return fetch(this._baseUrl, {
+      headers: this._headers,
+    }).then((res) => {
+      return this._checkResponse(res);
     });
   }
 }

@@ -1,4 +1,5 @@
 import "../pages/index.css";
+import { UserInfo } from "./userInfo.js";
 import { enableValidation, validationVar, resetError } from "./validate.js";
 import { openPopup, closePopup, addListenerPopup } from "./modal.js";
 import { checkResponse } from "./utils";
@@ -50,14 +51,22 @@ enableValidation(validationVar);
 addListenerPopup();
 
 const api = new Api(config);
+const userInfo = new UserInfo(profileUserName, profileUserAbout, avatarImg);
 
 api
-  ._getUserInfo()
-
+  .getUserInfo()
   .then((data) => {
-    profileUserName.textContent = data.name;
-    profileUserAbout.textContent = data.about;
-  });
+    userInfo.pastNameAndAbout(data.name, data.about);
+    userInfo._getId(data);
+  })
+  .catch((err) => console.log(err));
+
+api
+  .loadAvatar()
+  .then((data) => {
+    userInfo.pastAvatar(data.avatar);
+  })
+  .catch((err) => console.log(err));
 
 /**
 Promise.all([getUserInfo(), loadAvatar(), getCards()])
