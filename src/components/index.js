@@ -49,22 +49,37 @@ const buttonSaveProfile = formEditUser.querySelector(".popup__button-save");
 const buttonSaveAvatar = popupEditAvatar.querySelector(".popup__button-save");
 enableValidation(validationVar);
 addListenerPopup();
-
+//
+//
+const arrCards = [];
 const api = new Api(config);
-const userInfo = new UserInfo(profileUserName, profileUserAbout, avatarImg);
+const userInfo = new UserInfo(
+  ".profile__user-name",
+  ".profile__user-about",
+  ".profile__avatar"
+);
 
 api
-  .getUserInfo()
-  .then((data) => {
-    userInfo.pastNameAndAbout(data.name, data.about);
-    userInfo._getId(data);
+  .getInfo()
+  .then(async (data) => {
+    await userInfo.setUserInfo(userInfo.getUserInfo(data));
   })
   .catch((err) => console.log(err));
 
 api
   .loadAvatar()
   .then((data) => {
-    userInfo.pastAvatar(data.avatar);
+    userInfo.setAvatar(userInfo.getUserInfo(data));
+  })
+  .catch((err) => console.log(err));
+
+api
+  .getCards()
+  .then((data) => {
+    data.reverse();
+    for (let i = 0; i < data.length; i++) {
+      arrCards[i] = new Card(data[i], "newMesto", userInfo._id);
+    }
   })
   .catch((err) => console.log(err));
 

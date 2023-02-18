@@ -1,23 +1,31 @@
 import { data } from "autoprefixer";
 
 export class UserInfo {
-  constructor(formName, formAbout, avatar) {
-    this._formName = formName;
-    this._formAbout = formAbout;
-    this._avatar = avatar;
-    this._idUser = null;
+  constructor(selName, selAbout, selAvatar) {
+    this._Name = document.querySelector(selName);
+    this._About = document.querySelector(selAbout);
+    this._Avatar = document.querySelector(selAvatar);
+    this._id = "";
   }
-
   _getId(data) {
     this._idUser = data._id;
   }
 
-  pastNameAndAbout(name, about, id) {
-    this._formName.textContent = name;
-    this._formAbout.textContent = about;
+  getUserInfo(data) {
+    this._id = data.id;
+    return {
+      name: data.name,
+      about: data.about,
+      avatar: data.avatar,
+    };
   }
 
-  pastAvatar(avatarUrl) {
-    this._avatar.src = avatarUrl;
+  setUserInfo(data) {
+    this._Name.textContent = data.name;
+    this._About.textContent = data.about;
+  }
+
+  setAvatar(data) {
+    this._Avatar.src = data.avatar;
   }
 }

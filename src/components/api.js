@@ -1,7 +1,5 @@
-import { checkResponse } from "./utils";
-
 export class Api {
-  constructor(config) {
+  constructor(config, transData) {
     this._baseUrl = config.baseUrl;
     this._cardsUrl = config.cardsUrl;
     this._likesUrl = config.likesUrl;
@@ -17,7 +15,7 @@ export class Api {
     }
   }
 
-  getUserInfo() {
+  getInfo() {
     return fetch(this._baseUrl, {
       headers: this._headers,
     }).then((res) => {
@@ -30,6 +28,85 @@ export class Api {
       headers: this._headers,
     }).then((res) => {
       return this._checkResponse(res);
+    });
+  }
+
+  addLike(cardId) {
+    return fetch(`${this._likesUrl}/${cardId}`, {
+      method: "PUT",
+      headers: this._headers,
+    }).then((res) => {
+      return this._checkResponse(res);
+    });
+  }
+
+  deleteLike(cardId) {
+    return fetch(`${this._likesUrl}/${cardId}`, {
+      method: "DELETE",
+      headers: this._headers,
+    }).then((res) => {
+      return this._checkResponse(res);
+    });
+  }
+
+  deleteCard(cardId) {
+    return fetch(`${this._cardsUrl}/${cardId}`, {
+      method: "DELETE",
+      headers: this._headers,
+    });
+  }
+
+  getCards() {
+    return fetch(this._cardsUrl, {
+      headers: this._headers,
+    }).then((res) => {
+      return this._checkResponse(res);
+    });
+  }
+
+  editProfile(newName, newAbout) {
+    return fetch(config._baseUrl, {
+      method: "PATCH",
+      headers: {
+        authorization: config._headers.authorization,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: newName,
+        about: newAbout,
+      }),
+    }).then((res) => {
+      return this._checkResponse(res);
+    });
+  }
+  postNewCard(nameMesto, linkMesto) {
+    return fetch(this._cardsUrl, {
+      method: "POST",
+      headers: {
+        authorization: this._headers.authorization,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: nameMesto,
+        link: linkMesto,
+      }),
+    }).then((res) => {
+      return this._checkResponse(res);
+    });
+  }
+
+  reloadNewAvatar(newAvatarLink) {
+    return fetch(this._avatarUrl, {
+      method: "PATCH",
+      headers: {
+        authorization: this._headers.authorization,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        avatar: newAvatarLink,
+      }),
+    }).then((res) => {
+      return this.checkResponse(res);
     });
   }
 }

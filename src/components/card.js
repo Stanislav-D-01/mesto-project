@@ -14,6 +14,63 @@ const popupViewImg = document.querySelector(".popup-views-img");
 const popupImg = document.querySelector(".popup__img");
 const popupNameImg = document.querySelector(".popup__name-img");
 
+class Cards {
+  constructor(data, templateSelector, idUser) {
+    this._nameCard = data.name;
+    this._linkMesto = data.link;
+    this._likes = data.likes;
+    this._idUserCard = data.owner._id;
+    this._idCard = data.id;
+    this._idUser = idUser;
+    this._template = document.querySelector(`#${templateSelector}`);
+    this._containerNewMesto;
+    this._cardImage;
+    this._buttonLike;
+    this._buttonDelete;
+    this._idUser;
+  }
+
+  createContainerNewMesto() {
+    this.containerNewMesto = this._template.content.cloneNode(true);
+    this._cardImage = containerNewMesto.querySelector(".cards__image");
+    this._buttonLike = containerNewMesto.querySelector(".cards__like");
+    this._numLikes = containerNewMesto.querySelector(".cards__num-likes");
+    this._buttonDelete = containerNewMesto.querySelector(".cards__delete");
+    this._cardImage.src = this._linkMesto;
+    this._cardImage.alt = this._nameCard;
+    this._numLikes.textContent = data.likes.length;
+    containerNewMesto.querySelector(".cards__title").textContent =
+      this._nameCard;
+  }
+  _checkMyLike() {
+    if (this._likes.length > 0) {
+      for (i = 0; i < this._likes.length; i++) {
+        if (this._likes._id == this._idUser) {
+          this._buttonLike.classList.add("cards__like_active");
+          break;
+        }
+      }
+    }
+  }
+
+  _checkMyCards() {
+    if (this._idUserCard == this._idUser) {
+      this._buttonDelete.classList.add("cards__delete_visible");
+    }
+  }
+}
+
+/**
+ /
+ /
+ /
+ /
+ /
+ /
+ /
+ /
+ /
+
 export function createContainerNewMesto(
   nameMesto,
   linkMesto,
@@ -30,6 +87,7 @@ export function createContainerNewMesto(
   cardImage.src = linkMesto;
   cardImage.alt = nameMesto;
   containerNewMesto.querySelector(".cards__title").textContent = nameMesto;
+
   numLikes.textContent = arrLikes.length;
   //проверка на наличие своих лайков
   if (arrLikes.length > 0) {
@@ -91,3 +149,4 @@ export function pastNewMesto(
     createContainerNewMesto(nameMesto, linkMesto, cardId, arrLikes, idUserCard)
   );
 }
+*/
