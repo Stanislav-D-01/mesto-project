@@ -10,6 +10,7 @@ import {
   popupAddMesto,
   pastNewMesto,
   cardsContainer,
+  Cards,
 } from "./card.js";
 import {
   loadAvatar,
@@ -52,7 +53,8 @@ addListenerPopup();
 //
 //
 const arrCards = [];
-const api = new Api(config);
+export const api = new Api(config);
+
 const userInfo = new UserInfo(
   ".profile__user-name",
   ".profile__user-about",
@@ -62,14 +64,7 @@ const userInfo = new UserInfo(
 api
   .getInfo()
   .then(async (data) => {
-    await userInfo.setUserInfo(userInfo.getUserInfo(data));
-  })
-  .catch((err) => console.log(err));
-
-api
-  .loadAvatar()
-  .then((data) => {
-    userInfo.setAvatar(userInfo.getUserInfo(data));
+    await userInfo.setUserInfo(data);
   })
   .catch((err) => console.log(err));
 
@@ -77,11 +72,21 @@ api
   .getCards()
   .then((data) => {
     data.reverse();
+    let arrCards = [];
     for (let i = 0; i < data.length; i++) {
-      arrCards[i] = new Card(data[i], "newMesto", userInfo._id);
+      arrCards[i] = new Cards(
+        data[i],
+        "newMesto",
+        userInfo.getUserInfo._id,
+        "cards"
+      );
+
+      arrCards[i].getFinishCard(api.addLike, api.deleteLike);
     }
   })
   .catch((err) => console.log(err));
+
+console.log(api._likesUrl);
 
 /**
 Promise.all([getUserInfo(), loadAvatar(), getCards()])

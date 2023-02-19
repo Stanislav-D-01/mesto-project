@@ -2,27 +2,22 @@ export class UserInfo {
   constructor(selName, selAbout, selAvatar) {
     this._elementName = document.querySelector(selName);
     this._elementAbout = document.querySelector(selAbout);
-    this._elemennAvatar = document.querySelector(selAvatar);
+    this._elementAvatar = document.querySelector(selAvatar);
   }
 
-  getUserInfo() {
+  getUserInfo(data) {
     return {
-      name: this._elementName.textContent,
-      about: this._elementAbout.textContent,
-      avatar: this._elemetnAvatar.src,
+      name: data.name,
+      about: data.about,
+      avatar: data.avatar,
+      _id: data._id,
     };
   }
 
-  setUserInfo(data, editProfile) {
-    editProfile(data.name, data.about).then((res) => {
-      this._elementName.textContent = res.name;
-      this._elementAbout.textContent = res.about;
-    });
-  }
-
-  setUserAvatar(avatar, reloadAvatar) {
-    reloadAvatar(avatar).then((res) => {
-      this._elemetnAvatar.src = res.avatar;
-    });
+  setUserInfo(data) {
+    this._elementName.textContent = data.name;
+    this._elementAbout.textContent = data.about;
+    this._elementAvatar.src = data.avatar;
+    this._userId = data._id;
   }
 }

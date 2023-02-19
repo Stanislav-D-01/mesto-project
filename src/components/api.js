@@ -1,5 +1,5 @@
 export class Api {
-  constructor(config, transData) {
+  constructor(config) {
     this._baseUrl = config.baseUrl;
     this._cardsUrl = config.cardsUrl;
     this._likesUrl = config.likesUrl;
@@ -32,6 +32,8 @@ export class Api {
   }
 
   addLike(cardId) {
+    const a = this._likesUrl;
+    debugger;
     return fetch(`${this._likesUrl}/${cardId}`, {
       method: "PUT",
       headers: this._headers,
