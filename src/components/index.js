@@ -105,6 +105,13 @@ Promise.all([getUserInfo(), loadAvatar(), getCards()])
   .catch((err) => console.log(err));
 
 formEditUser.addEventListener("submit", (evt) => {
+
+  userInfo.setUserInfo({
+    name: nameInput,
+    about: aboutInput,
+  }, api.editProfile)
+
+
   evt.preventDefault();
   renderLoading("Сохранение", "Сохранить", true, buttonSaveProfile);
   patchProfile(nameInput, aboutInput)

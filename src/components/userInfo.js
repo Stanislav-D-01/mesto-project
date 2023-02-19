@@ -1,31 +1,28 @@
-import { data } from "autoprefixer";
-
 export class UserInfo {
   constructor(selName, selAbout, selAvatar) {
-    this._Name = document.querySelector(selName);
-    this._About = document.querySelector(selAbout);
-    this._Avatar = document.querySelector(selAvatar);
-    this._id = "";
-  }
-  _getId(data) {
-    this._idUser = data._id;
+    this._elementName = document.querySelector(selName);
+    this._elementAbout = document.querySelector(selAbout);
+    this._elemennAvatar = document.querySelector(selAvatar);
   }
 
-  getUserInfo(data) {
-    this._id = data.id;
+  getUserInfo() {
     return {
-      name: data.name,
-      about: data.about,
-      avatar: data.avatar,
+      name: this._elementName.textContent,
+      about: this._elementAbout.textContent,
+      avatar: this._elemetnAvatar.src,
     };
   }
 
-  setUserInfo(data) {
-    this._Name.textContent = data.name;
-    this._About.textContent = data.about;
+  setUserInfo(data, editProfile) {
+    editProfile(data.name, data.about).then((res) => {
+      this._elementName.textContent = res.name;
+      this._elementAbout.textContent = res.about;
+    });
   }
 
-  setAvatar(data) {
-    this._Avatar.src = data.avatar;
+  setUserAvatar(avatar, reloadAvatar) {
+    reloadAvatar(avatar).then((res) => {
+      this._elemetnAvatar.src = res.avatar;
+    });
   }
 }
