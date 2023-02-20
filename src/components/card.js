@@ -65,13 +65,12 @@ export class Cards {
   _addEventListenerLike(apiAddLike, apiDelLike) {
     this._buttonLike.addEventListener("click", () => {
       if (this._buttonLike.matches(".cards__like_active")) {
-        apiDelLike(this._idCard).then((data) => {
+        apiDelLike().then((data) => {
           this._numLikes.textContent = data.likes.length;
           this._buttonLike.classList.remove("cards__like_active");
         });
       } else {
-        debugger;
-        apiAddLike(this._idCard).then((data) => {
+        apiAddLike().then((data) => {
           this._numLikes.textContent = data.likes.length;
           this._buttonLike.classList.add("cards__like_active");
         });
@@ -79,21 +78,21 @@ export class Cards {
     });
   }
 
-  getFinishCard(apiAddLike, apiDelLike) {
+  getFinishCard(addLike, delLike) {
     this._card = this._createContainerNewMesto();
     this._checkMyLike();
     this._checkMyCards();
-    this._addEventListenerLike(apiAddLike, apiDelLike);
+    this._addEventListenerLike(addLike, delLike);
     this._cardsContainer.prepend(this._card);
   }
 }
 
 /**
-  
+
 
 _addEventListenerLike() {
   this._buttonLike._addEventListenerLike("click", (evt) => {
-    
+
     if(this._buttonLike.matches(".cards__like_active")){
       toggleLike ("del", evt, apiData);
     }else{

@@ -73,15 +73,18 @@ api
   .then((data) => {
     data.reverse();
     let arrCards = [];
-    for (let i = 0; i < data.length; i++) {
-      arrCards[i] = new Cards(
-        data[i],
-        "newMesto",
-        userInfo.getUserInfo._id,
-        "cards"
-      );
 
-      arrCards[i].getFinishCard(api.addLike, api.deleteLike);
+    for (let i = 0; i < data.length; i++) {
+      arrCards[i] = new Cards(data[i], "newMesto", userInfo._userId, "cards");
+
+      arrCards[i].getFinishCard(
+        (addLike) => {
+          return api.addLike(data[i]._id);
+        },
+        (delLike) => {
+          return api.deleteLike(data[i]._id);
+        }
+      );
     }
   })
   .catch((err) => console.log(err));
