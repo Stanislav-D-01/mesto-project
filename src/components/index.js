@@ -1,7 +1,6 @@
 import "../pages/index.css";
-import { enableValidation, validationVar, resetError } from "./validate.js";
+import { resetError, FormValidator } from "./FormValidator.js";
 import { openPopup, closePopup, addListenerPopup } from "./modal.js";
-
 import {
   nameMestoInput,
   linkMestoInput,
@@ -20,6 +19,7 @@ import {
   deleteLike,
 } from "./api";
 import { renderLoading } from "./utils";
+import { validationVar } from "./constants";
 
 export const formAddMesto = document.querySelector("form[name=add-new-mesto]");
 const buttonAddMesto = document.querySelector(".profile__add-button");
@@ -43,7 +43,11 @@ export let idUser = "";
 let initialCards = {};
 const buttonSaveProfile = formEditUser.querySelector(".popup__button-save");
 const buttonSaveAvatar = popupEditAvatar.querySelector(".popup__button-save");
-enableValidation(validationVar);
+const formElements = document.querySelectorAll(validationVar.formSelector);
+formElements.forEach((formElement) => {
+  const formValidator = new FormValidator(validationVar, formElement);
+  formValidator.enableValidation();
+});
 addListenerPopup();
 
 Promise.all([getUserInfo(), loadAvatar(), getCards()])
@@ -91,24 +95,26 @@ buttonEditProfile.addEventListener("click", () => {
   nameInput.value = profileUserName.textContent;
   aboutInput.value = profileUserAbout.textContent;
   openPopup(popupEditProfile);
-  resetError(
-    popupEditProfile,
-    validationVar.inputSelector,
-    validationVar.submitButtonSelector,
-    validationVar.inactiveButtonClass
-  );
+  // TODO: вынести в отдельный метод
+  // resetError(
+  //   popupEditProfile,
+  //   validationVar.inputSelector,
+  //   validationVar.submitButtonSelector,
+  //   validationVar.inactiveButtonClass
+  // );
 });
 
 buttonAddMesto.addEventListener("click", () => {
   nameMestoInput.value = "";
   linkMestoInput.value = "";
   openPopup(popupAddMesto);
-  resetError(
-    popupAddMesto,
-    validationVar.inputSelector,
-    validationVar.submitButtonSelector,
-    validationVar.inactiveButtonClass
-  );
+  // TODO: вынести в отдельный метод
+  // resetError(
+  //   popupAddMesto,
+  //   validationVar.inputSelector,
+  //   validationVar.submitButtonSelector,
+  //   validationVar.inactiveButtonClass
+  // );
 });
 
 formAddMesto.addEventListener("submit", (evt) => {
@@ -137,12 +143,13 @@ formAddMesto.addEventListener("submit", (evt) => {
 buttonNewAvatar.addEventListener("click", () => {
   newAvatarInput.value = "";
   openPopup(popupEditAvatar);
-  resetError(
-    popupEditAvatar,
-    validationVar.inputSelector,
-    validationVar.submitButtonSelector,
-    validationVar.inactiveButtonClass
-  );
+  // TODO: вынести в отдельный метод
+  // resetError(
+  //   popupEditAvatar,
+  //   validationVar.inputSelector,
+  //   validationVar.submitButtonSelector,
+  //   validationVar.inactiveButtonClass
+  // );
 });
 
 formEditAvatar.addEventListener("submit", (evt) => {
