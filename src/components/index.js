@@ -1,12 +1,16 @@
 import "../pages/index.css";
+import { UserInfo } from "./userInfo.js";
+import { checkResponse } from "./utils";
 import { resetError, FormValidator } from "./FormValidator.js";
 import { openPopup, closePopup, addListenerPopup } from "./modal.js";
+
 import {
   nameMestoInput,
   linkMestoInput,
   popupAddMesto,
   pastNewMesto,
   cardsContainer,
+  Cards,
 } from "./card.js";
 import {
   loadAvatar,
@@ -17,10 +21,12 @@ import {
   patchProfile,
   addLike,
   deleteLike,
-} from "./api";
+  Api,
+} from "./api.js";
 import { renderLoading } from "./utils";
 import { validationVar } from "./constants";
 
+import { config } from "./varibles.js";
 export const formAddMesto = document.querySelector("form[name=add-new-mesto]");
 const buttonAddMesto = document.querySelector(".profile__add-button");
 const buttonEditProfile = document.querySelector(".profile__edit-button");
@@ -49,7 +55,48 @@ formElements.forEach((formElement) => {
   formValidator.enableValidation();
 });
 addListenerPopup();
+//
+//
+const arrCards = [];
+export const api = new Api(config);
 
+const userInfo = new UserInfo(
+  ".profile__user-name",
+  ".profile__user-about",
+  ".profile__avatar"
+);
+
+api
+  .getInfo()
+  .then(async (data) => {
+    await userInfo.setUserInfo(data);
+  })
+  .catch((err) => console.log(err));
+
+api
+  .getCards()
+  .then((data) => {
+    data.reverse();
+    let arrCards = [];
+
+    for (let i = 0; i < data.length; i++) {
+      arrCards[i] = new Cards(data[i], "newMesto", userInfo._userId, "cards");
+
+      arrCards[i].getFinishCard(
+        (addLike) => {
+          return api.addLike(data[i]._id);
+        },
+        (delLike) => {
+          return api.deleteLike(data[i]._id);
+        }
+      );
+    }
+  })
+  .catch((err) => console.log(err));
+
+console.log(api._likesUrl);
+
+/**
 Promise.all([getUserInfo(), loadAvatar(), getCards()])
   .then(([userInfo, avatar, cards]) => {
     profileUserName.textContent = userInfo.name;
@@ -71,6 +118,13 @@ Promise.all([getUserInfo(), loadAvatar(), getCards()])
   .catch((err) => console.log(err));
 
 formEditUser.addEventListener("submit", (evt) => {
+
+  userInfo.setUserInfo({
+    name: nameInput,
+    about: aboutInput,
+  }, api.editProfile)
+
+
   evt.preventDefault();
   renderLoading("Сохранение", "Сохранить", true, buttonSaveProfile);
   patchProfile(nameInput, aboutInput)
@@ -190,3 +244,4 @@ export function toggleLike(status, cardId, evt, numLikes) {
       });
   }
 }
+*/
