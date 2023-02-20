@@ -93,37 +93,15 @@ api
     }
   })
   .catch((err) => console.log(err));
-
-console.log(api._likesUrl);
-
 /**
-Promise.all([getUserInfo(), loadAvatar(), getCards()])
-  .then(([userInfo, avatar, cards]) => {
-    profileUserName.textContent = userInfo.name;
-    profileUserAbout.textContent = userInfo.about;
-    idUser = userInfo._id;
-    avatarImg.src = avatar.avatar;
-    initialCards = cards;
-    for (let i = 0; i < initialCards.length; i++) {
-      pastNewMesto(
-        initialCards[initialCards.length - i - 1].name,
-        initialCards[initialCards.length - i - 1].link,
-        cardsContainer,
-        initialCards[initialCards.length - i - 1]._id,
-        initialCards[initialCards.length - i - 1].likes,
-        initialCards[initialCards.length - i - 1].owner._id
-      );
-    }
-  })
-  .catch((err) => console.log(err));
-
 formEditUser.addEventListener("submit", (evt) => {
-
-  userInfo.setUserInfo({
-    name: nameInput,
-    about: aboutInput,
-  }, api.editProfile)
-
+  userInfo.setUserInfo(
+    {
+      name: nameInput,
+      about: aboutInput,
+    },
+    api.editProfile
+  );
 
   evt.preventDefault();
   renderLoading("Сохранение", "Сохранить", true, buttonSaveProfile);
@@ -140,6 +118,7 @@ formEditUser.addEventListener("submit", (evt) => {
       renderLoading("Сохранение...", "Сохранить", false, buttonSaveProfile)
     );
 });
+*/
 
 buttonsClose.forEach((button) => {
   button.addEventListener("click", closePopup);
@@ -170,7 +149,7 @@ buttonAddMesto.addEventListener("click", () => {
   //   validationVar.inactiveButtonClass
   // );
 });
-
+/**
 formAddMesto.addEventListener("submit", (evt) => {
   evt.preventDefault();
   renderLoading("Сохранение...", "Создать", true, buttonSaveMesto);
@@ -193,7 +172,7 @@ formAddMesto.addEventListener("submit", (evt) => {
       renderLoading("Сохранение...", "Создать", false, buttonSaveMesto)
     );
 });
-
+*/
 buttonNewAvatar.addEventListener("click", () => {
   newAvatarInput.value = "";
   openPopup(popupEditAvatar);
@@ -206,6 +185,7 @@ buttonNewAvatar.addEventListener("click", () => {
   // );
 });
 
+/**
 formEditAvatar.addEventListener("submit", (evt) => {
   evt.preventDefault();
   renderLoading("Сохранение...", "Сохранить", true, buttonSaveAvatar);
@@ -221,27 +201,4 @@ formEditAvatar.addEventListener("submit", (evt) => {
       renderLoading("Сохранение...", "Сохранить", false, buttonSaveAvatar)
     );
 });
-
-export function toggleLike(status, cardId, evt, numLikes) {
-  if (status == "del") {
-    deleteLike(cardId)
-      .then((data) => {
-        numLikes.textContent = data.likes.length;
-        evt.target.classList.remove("cards__like_active");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-  if (status == "add") {
-    addLike(cardId)
-      .then((data) => {
-        numLikes.textContent = data.likes.length;
-        evt.target.classList.add("cards__like_active");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-}
 */

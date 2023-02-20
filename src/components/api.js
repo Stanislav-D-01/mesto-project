@@ -33,7 +33,7 @@ export class Api {
 
   addLike(cardId) {
     const a = this._likesUrl;
-    debugger;
+
     return fetch(`${this._likesUrl}/${cardId}`, {
       method: "PUT",
       headers: this._headers,
