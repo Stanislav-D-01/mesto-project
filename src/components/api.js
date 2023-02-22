@@ -81,6 +81,7 @@ export class Api {
       return this._checkResponse(res);
     });
   }
+  // TODO: переделать аргументы на один объект data
   postNewCard(nameMesto, linkMesto) {
     return fetch(this._cardsUrl, {
       method: "POST",
