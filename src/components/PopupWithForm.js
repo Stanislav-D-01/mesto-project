@@ -22,9 +22,7 @@ export class PopupWithForm extends Popup {
     this._form.addEventListener("submit", (event) => {
       event.preventDefault();
       const data = this._getInputValues();
-      this._submitForm(data["name-new-mesto"], data["link-new-mesto"]).then(
-        () => this.close()
-      );
+      this._submitForm(data).then(() => this.close());
     });
   }
 
