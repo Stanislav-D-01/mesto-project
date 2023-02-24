@@ -1,22 +1,5 @@
-import { Api } from "./api.js";
-import { openPopup } from "./modal.js";
-//import { deleteLike, addlike, deleteCard } from "./api.js";
-import { api } from "./index.js";
-const templateNewMesto = document.querySelector("#newMesto");
-export const popupAddMesto = document.querySelector(".add-mesto-popup");
-export const nameMestoInput = document.querySelector(
-  "input[name=name-new-mesto]"
-);
-export const linkMestoInput = document.querySelector(
-  "input[name=link-new-mesto]"
-);
-export const cardsContainer = document.querySelector(".cards");
-const popupViewImg = document.querySelector(".popup-views-img");
-const popupImg = document.querySelector(".popup__img");
-const popupNameImg = document.querySelector(".popup__name-img");
-
 export class Cards {
-  constructor(data, templateSelector, idUser, cardsContainerSelector) {
+  constructor(data, templateSelector, idUser, openViewer) {
     this._nameCard = data.name;
     this._linkMesto = data.link;
     this._likes = data.likes;
@@ -24,7 +7,7 @@ export class Cards {
     this._idCard = data._id;
     this._idUser = idUser;
     this._template = document.querySelector(`#${templateSelector}`);
-    this._cardsContainer = document.querySelector(`.${cardsContainerSelector}`);
+    this._openViewer = openViewer;
     this._containerNewMesto;
     this._cardImage;
     this._buttonLike;
@@ -78,12 +61,30 @@ export class Cards {
     });
   }
 
-  getFinishCard(addLike, delLike) {
+  _addEventListenerDeleteCard(apiDeleteCard) {
+    this._buttonDelete.addEventListener("click", function (evt) {
+      apiDeleteCard()
+        .then(() => {
+          evt.target.parentElement.remove();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  }
+  _addEventListenerViewer() {
+    this._cardImage.addEventListener("click", this._openViewer);
+  }
+
+  getFinishCard(addLike, delLike, DelCard) {
     this._card = this._createContainerNewMesto();
     this._checkMyLike();
     this._checkMyCards();
     this._addEventListenerLike(addLike, delLike);
-    this._cardsContainer.prepend(this._card);
+    this._addEventListenerDeleteCard(DelCard);
+    this._addEventListenerViewer();
+    //this._cardsContainer.prepend(this._card);
+    return this._card;
   }
 }
 

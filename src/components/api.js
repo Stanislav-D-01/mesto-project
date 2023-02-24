@@ -3,7 +3,7 @@ export class Api {
     this._baseUrl = config.baseUrl;
     this._cardsUrl = config.cardsUrl;
     this._likesUrl = config.likesUrl;
-    this._avatarUrl = config.avatar;
+    this._avatarUrl = config.avatarUrl;
     this._headers = config.headers;
   }
 
@@ -67,10 +67,10 @@ export class Api {
   }
 
   editProfile(newName, newAbout) {
-    return fetch(config._baseUrl, {
+    return fetch(this._baseUrl, {
       method: "PATCH",
       headers: {
-        authorization: config._headers.authorization,
+        authorization: this._headers.authorization,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -109,7 +109,7 @@ export class Api {
         avatar: newAvatarLink,
       }),
     }).then((res) => {
-      return this.checkResponse(res);
+      return this._checkResponse(res);
     });
   }
 }
