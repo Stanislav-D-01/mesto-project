@@ -27,12 +27,12 @@ export const linkMestoInput = document.querySelector(
 export const formElements = document.querySelectorAll(
   validationVar.formSelector
 );
-//export const formAddMesto = document.querySelector("form[name=add-new-mesto]");
+
 export const buttonAddMesto = document.querySelector(".profile__add-button");
 export const buttonEditProfile = document.querySelector(
   ".profile__edit-button"
 );
-//export const buttonsClose = document.querySelectorAll(".popup__icon-close");
+
 const formEditUser = document.querySelector('form[name="edit-user"]');
 
 export const profileUserName = document.querySelector(".profile__user-name");
@@ -49,7 +49,6 @@ export const avatarImg = document.querySelector(".profile__avatar");
 export const buttonNewAvatar = document.querySelector(
   ".profile__button-avatar-edit"
 );
-//export let idUser = "";
 
 export const buttonSaveProfile = formEditUser.querySelector(
   ".popup__button-save"

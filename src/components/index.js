@@ -91,7 +91,7 @@ api
   .catch((err) => console.log(err));
 
 const popupEdit = new PopupWithForm(popupEditProfile, (data) => {
-  renderLoading("Сохранение", "Сохранить", true, buttonSaveProfile);
+  renderLoading("Сохранение...", "Сохранить", true, buttonSaveProfile);
   api
     .editProfile(data["name-user"], data["about-user"])
     .then((data) => {
@@ -116,6 +116,7 @@ buttonEditProfile.addEventListener("click", () => {
 });
 
 const popupAddCard = new PopupWithForm(popupAddMesto, (data) => {
+  renderLoading("Создание...", "Создать", true, buttonSaveMesto);
   api
     .postNewCard(data["name-new-mesto"], data["link-new-mesto"])
     .then((data) => {
@@ -140,11 +141,16 @@ const popupAddCard = new PopupWithForm(popupAddMesto, (data) => {
           }
         )
       );
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      renderLoading("Создание...", "Создать", false, buttonSaveMesto);
       popupAddCard.close();
     });
 });
 popupAddCard.setEventListeners();
-
 buttonAddMesto.addEventListener("click", () => {
   nameMestoInput.value = "";
   linkMestoInput.value = "";
@@ -153,10 +159,20 @@ buttonAddMesto.addEventListener("click", () => {
 });
 
 const popupEditAva = new PopupWithForm(popupEditAvatar, (data) => {
-  api.reloadNewAvatar(data["input-link-avatar"]).then((data) => {
-    avatarImg.src = data.avatar;
-    popupEditAva.close();
-  });
+  renderLoading("Сохранение...", "Сохранить", true, buttonSaveAvatar);
+  api
+    .reloadNewAvatar(data["input-link-avatar"])
+    .then((data) => {
+      avatarImg.src = data.avatar;
+      popupEditAva.close();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      renderLoading("Сохранение...", "Сохранить", false, buttonSaveAvatar);
+      popupEditAva.close();
+    });
 });
 popupEditAva.setEventListeners();
 buttonNewAvatar.addEventListener("click", () => {
@@ -164,103 +180,3 @@ buttonNewAvatar.addEventListener("click", () => {
   formValidator["edit-avatar"].resetError();
   popupEditAva.open();
 });
-
-/**
-formEditUser.addEventListener("submit", (evt) => {
-  userInfo.setUserInfo(
-    {
-      name: nameInput,
-      about: aboutInput,
-    },
-    api.editProfile
-  );
-
-  evt.preventDefault();
-  renderLoading("Сохранение", "Сохранить", true, buttonSaveProfile);
-  patchProfile(nameInput, aboutInput)
-    .then((data) => {
-      profileUserName.textContent = data.name;
-      profileUserAbout.textContent = data.about;
-      closePopup(popupEditProfile);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() =>
-      renderLoading("Сохранение...", "Сохранить", false, buttonSaveProfile)
-    );
-});
-*/
-
-/**buttonsClose.forEach((button) => {
-  button.addEventListener("click", closePopup);
-});*/
-
-/**
-buttonAddMesto.addEventListener("click", () => {
-  nameMestoInput.value = "";
-  linkMestoInput.value = "";
-  openPopup(popupAddMesto);
-  // TODO: вынести в отдельный метод
-  // resetError(
-  //   popupAddMesto,
-  //   validationVar.inputSelector,
-  //   validationVar.submitButtonSelector,
-  //   validationVar.inactiveButtonClass
-  // );
-});
-*/
-/**
-formAddMesto.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-  renderLoading("Сохранение...", "Создать", true, buttonSaveMesto);
-  postNewCard(nameMestoInput, linkMestoInput)
-    .then((data) => {
-      pastNewMesto(
-        data.name,
-        data.link,
-        cardsContainer,
-        data._id,
-        [],
-        data.owner._id
-      );
-      closePopup(popupAddMesto);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() =>
-      renderLoading("Сохранение...", "Создать", false, buttonSaveMesto)
-    );
-});
-*/
-/**
-buttonNewAvatar.addEventListener("click", () => {
-  newAvatarInput.value = "";
-  openPopup(popupEditAvatar);
-  // TODO: вынести в отдельный метод
-  // resetError(
-  //   popupEditAvatar,
-  //   validationVar.inputSelector,
-  //   validationVar.submitButtonSelector,
-  //   validationVar.inactiveButtonClass
-  // );
-});
-*/
-/**
-formEditAvatar.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-  renderLoading("Сохранение...", "Сохранить", true, buttonSaveAvatar);
-  reloadAvatar(newAvatarInput)
-    .then((data) => {
-      avatarImg.src = data.avatar;
-      closePopup(popupEditAvatar);
-    })
-    .catch((res) => {
-      console.log(res);
-    })
-    .finally(() =>
-      renderLoading("Сохранение...", "Сохранить", false, buttonSaveAvatar)
-    );
-});
-*/
