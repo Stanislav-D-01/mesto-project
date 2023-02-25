@@ -1,22 +1,5 @@
-import { Api } from "./api.js";
-import { openPopup } from "./modal.js";
-//import { deleteLike, addlike, deleteCard } from "./api.js";
-import { api } from "./index.js";
-const templateNewMesto = document.querySelector("#newMesto");
-export const popupAddMesto = document.querySelector(".add-mesto-popup");
-export const nameMestoInput = document.querySelector(
-  "input[name=name-new-mesto]"
-);
-export const linkMestoInput = document.querySelector(
-  "input[name=link-new-mesto]"
-);
-export const cardsContainer = document.querySelector(".cards");
-const popupViewImg = document.querySelector(".popup-views-img");
-const popupImg = document.querySelector(".popup__img");
-const popupNameImg = document.querySelector(".popup__name-img");
-
-export class Cards {
-  constructor(data, templateSelector, idUser, cardsContainerSelector) {
+export class Card {
+  constructor(data, templateSelector, idUser, openViewer) {
     this._nameCard = data.name;
     this._linkMesto = data.link;
     this._likes = data.likes;
@@ -24,7 +7,7 @@ export class Cards {
     this._idCard = data._id;
     this._idUser = idUser;
     this._template = document.querySelector(`#${templateSelector}`);
-    this._cardsContainer = document.querySelector(`.${cardsContainerSelector}`);
+    this._openViewer = openViewer;
     this._containerNewMesto;
     this._cardImage;
     this._buttonLike;
@@ -78,123 +61,28 @@ export class Cards {
     });
   }
 
-  getFinishCard(addLike, delLike) {
-    this._card = this._createContainerNewMesto();
-    this._checkMyLike();
-    this._checkMyCards();
-    this._addEventListenerLike(addLike, delLike);
-    this._cardsContainer.prepend(this._card);
-  }
-}
-
-/**
-
-
-_addEventListenerLike() {
-  this._buttonLike._addEventListenerLike("click", (evt) => {
-
-    if(this._buttonLike.matches(".cards__like_active")){
-      toggleLike ("del", evt, apiData);
-    }else{
-      toggleLike ("del", evt, apiData);
-    }
-  })
-}
-
-_toggleLike (type, evt, api){
-  if (type == "del") {
-.then
-  }
-}
-*/
-
-/**
- /
- /
- /
- /
- /
- /
- /
- /
- /
-
-export function createContainerNewMesto(
-  nameMesto,
-  linkMesto,
-  cardId,
-  arrLikes,
-  idUserCard
-) {
-  //функция формирует из template карточку места с добавлением слушаетелей кликов на иконку удаления, клик по картинке для просмотра и клик лайка
-  const containerNewMesto = templateNewMesto.content.cloneNode(true);
-  const cardImage = containerNewMesto.querySelector(".cards__image");
-  const buttonLike = containerNewMesto.querySelector(".cards__like");
-  const numLikes = containerNewMesto.querySelector(".cards__num-likes");
-  const buttonDelete = containerNewMesto.querySelector(".cards__delete");
-  cardImage.src = linkMesto;
-  cardImage.alt = nameMesto;
-  containerNewMesto.querySelector(".cards__title").textContent = nameMesto;
-
-  numLikes.textContent = arrLikes.length;
-  //проверка на наличие своих лайков
-  if (arrLikes.length > 0) {
-    for (let i = 0; i < arrLikes.length; i++) {
-      if (arrLikes[i]._id == idUser) {
-        buttonLike.classList.add("cards__like_active");
-        break;
-      }
-    }
-  }
-  //проверка на наличие своих карточек, если есть - отображаем кнопку удалить
-  if (idUserCard == idUser) {
-    buttonDelete.classList.add("cards__delete_visible");
-  }
-
-  buttonLike.addEventListener("click", function (evt) {
-    if (buttonLike.matches(".cards__like_active")) {
-      toggleLike("del", cardId, evt, numLikes);
-    } else {
-      toggleLike("add", cardId, evt, numLikes);
-    }
-  });
-
-  containerNewMesto
-    .querySelector(".cards__delete")
-    .addEventListener("click", function (evt) {
-      deleteCard(cardId)
-        .then((res) => {
-          if (res.ok) {
-            evt.target.parentElement.remove();
-          } else return Promise.reject(`Ошибка:%{res.status}`);
+  _addEventListenerDeleteCard(apiDeleteCard) {
+    this._buttonDelete.addEventListener("click", function (evt) {
+      apiDeleteCard()
+        .then(() => {
+          evt.target.parentElement.remove();
         })
         .catch((err) => {
           console.log(err);
         });
     });
+  }
+  _addEventListenerViewer() {
+    this._cardImage.addEventListener("click", this._openViewer);
+  }
 
-  containerNewMesto
-    .querySelector(".cards__image")
-    .addEventListener("click", function (evt) {
-      popupImg.src = linkMesto;
-      popupImg.alt = nameMesto;
-      popupNameImg.textContent = nameMesto;
-      openPopup(popupViewImg);
-    });
-  return containerNewMesto; //возращает готовую карточку для вставки в DOM
+  getFinishCard(addLike, delLike, DelCard) {
+    this._card = this._createContainerNewMesto();
+    this._checkMyLike();
+    this._checkMyCards();
+    this._addEventListenerLike(addLike, delLike);
+    this._addEventListenerDeleteCard(DelCard);
+    this._addEventListenerViewer();
+    return this._card;
+  }
 }
-
-export function pastNewMesto(
-  nameMesto,
-  linkMesto,
-  cardsContainer,
-  cardId,
-  arrLikes,
-  idUserCard
-) {
-  //вставляет заготовленную карточку в DOM в родитель .cards
-  cardsContainer.prepend(
-    createContainerNewMesto(nameMesto, linkMesto, cardId, arrLikes, idUserCard)
-  );
-}
-*/

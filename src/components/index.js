@@ -1,64 +1,55 @@
 import "../pages/index.css";
 import { UserInfo } from "./userInfo.js";
-import { checkResponse } from "./utils";
-import { resetError, FormValidator } from "./FormValidator.js";
-import { openPopup, closePopup, addListenerPopup } from "./modal.js";
+import { FormValidator } from "./FormValidator.js";
+import { Section } from "./Section";
+import { Card } from "./card.js";
+import { Api } from "./api.js";
+import { PopupWithForm } from "./PopupWithForm.js";
+import { PopupWithImage } from "./PopupWithImage";
+import { validationVar, config } from "./constants.js";
+import { renderLoading } from "./utils.js";
 
-import {
-  nameMestoInput,
-  linkMestoInput,
-  popupAddMesto,
-  pastNewMesto,
-  cardsContainer,
-  Cards,
-} from "./card.js";
-import {
-  loadAvatar,
-  reloadAvatar,
-  getUserInfo,
-  getCards,
-  postNewCard,
-  patchProfile,
-  addLike,
-  deleteLike,
-  Api,
-} from "./api.js";
-import { renderLoading } from "./utils";
-import { validationVar } from "./constants";
+const popupAddMesto = document.querySelector(".add-mesto-popup");
+const nameMestoInput = document.querySelector("input[name=name-new-mesto]");
+const linkMestoInput = document.querySelector("input[name=link-new-mesto]");
 
-import { config } from "./varibles.js";
-export const formAddMesto = document.querySelector("form[name=add-new-mesto]");
+const formElements = document.querySelectorAll(validationVar.formSelector);
+
 const buttonAddMesto = document.querySelector(".profile__add-button");
 const buttonEditProfile = document.querySelector(".profile__edit-button");
-const buttonsClose = document.querySelectorAll(".popup__icon-close");
+
 const formEditUser = document.querySelector('form[name="edit-user"]');
-const buttonSaveMesto = popupAddMesto.querySelector(".popup__button-save");
-export const profileUserName = document.querySelector(".profile__user-name");
-export const profileUserAbout = document.querySelector(".profile__user-about");
-export const popupEditProfile = document.querySelector(".profile-popup");
+
+const profileUserName = document.querySelector(".profile__user-name");
+const profileUserAbout = document.querySelector(".profile__user-about");
+const popupEditProfile = document.querySelector(".profile-popup");
 const nameInput = document.querySelector("input[name=name-user]");
 const aboutInput = document.querySelector("input[name=about-user]");
-export const popupEditAvatar = document.querySelector(".avatar-popup");
+const popupEditAvatar = document.querySelector(".avatar-popup");
 const formEditAvatar = document.querySelector("form[name=edit-avatar]");
 const newAvatarInput = formEditAvatar.querySelector(
   "input[name=input-link-avatar]"
 );
 const avatarImg = document.querySelector(".profile__avatar");
 const buttonNewAvatar = document.querySelector(".profile__button-avatar-edit");
-export let idUser = "";
-let initialCards = {};
+
 const buttonSaveProfile = formEditUser.querySelector(".popup__button-save");
 const buttonSaveAvatar = popupEditAvatar.querySelector(".popup__button-save");
-const formElements = document.querySelectorAll(validationVar.formSelector);
+const buttonSaveMesto = popupAddMesto.querySelector(".popup__button-save");
+
+const formValidator = {};
+const popupViewImg = document.querySelector(".popup-views-img");
+const cardsSelector = ".cards";
+
 formElements.forEach((formElement) => {
-  const formValidator = new FormValidator(validationVar, formElement);
-  formValidator.enableValidation();
+  formValidator[`${formElement.name}`] = new FormValidator(
+    validationVar,
+    formElement
+  );
+  formValidator[`${formElement.name}`].enableValidation();
 });
-addListenerPopup();
-//
-//
-const arrCards = [];
-export const api = new Api(config);
+
+const api = new Api(config);
 
 const userInfo = new UserInfo(
   ".profile__user-name",
@@ -73,132 +64,128 @@ api
   })
   .catch((err) => console.log(err));
 
+const popupWithImage = new PopupWithImage(popupViewImg);
+popupWithImage.setEventListeners();
+const cardsContainer = new Section({}, cardsSelector);
+
 api
   .getCards()
   .then((data) => {
     data.reverse();
     let arrCards = [];
-
     for (let i = 0; i < data.length; i++) {
-      arrCards[i] = new Cards(data[i], "newMesto", userInfo._userId, "cards");
-
-      arrCards[i].getFinishCard(
-        (addLike) => {
-          return api.addLike(data[i]._id);
-        },
-        (delLike) => {
-          return api.deleteLike(data[i]._id);
+      arrCards[i] = new Card(
+        data[i],
+        "newMesto",
+        userInfo._userId,
+        (openViewer) => {
+          popupWithImage.open(arrCards[i]._linkMesto, arrCards[i]._nameCard);
         }
+      );
+      cardsContainer.addItem(
+        arrCards[i].getFinishCard(
+          (addLike) => {
+            return api.addLike(data[i]._id);
+          },
+          (delLike) => {
+            return api.deleteLike(data[i]._id);
+          },
+          (delCard) => {
+            return api.deleteCard(data[i]._id);
+          }
+        )
       );
     }
   })
   .catch((err) => console.log(err));
-/**
-formEditUser.addEventListener("submit", (evt) => {
-  userInfo.setUserInfo(
-    {
-      name: nameInput,
-      about: aboutInput,
-    },
-    api.editProfile
-  );
 
-  evt.preventDefault();
-  renderLoading("Сохранение", "Сохранить", true, buttonSaveProfile);
-  patchProfile(nameInput, aboutInput)
+const popupEdit = new PopupWithForm(popupEditProfile, (data) => {
+  renderLoading("Сохранение...", "Сохранить", true, buttonSaveProfile);
+  api
+    .editProfile(data["name-user"], data["about-user"])
     .then((data) => {
       profileUserName.textContent = data.name;
       profileUserAbout.textContent = data.about;
-      closePopup(popupEditProfile);
     })
     .catch((err) => {
       console.log(err);
     })
-    .finally(() =>
-      renderLoading("Сохранение...", "Сохранить", false, buttonSaveProfile)
-    );
+    .finally(() => {
+      popupEdit.close();
+      renderLoading("Сохранение...", "Сохранить", false, buttonSaveProfile);
+    });
 });
-*/
-
-buttonsClose.forEach((button) => {
-  button.addEventListener("click", closePopup);
-});
+popupEdit.setEventListeners();
 
 buttonEditProfile.addEventListener("click", () => {
   nameInput.value = profileUserName.textContent;
   aboutInput.value = profileUserAbout.textContent;
-  openPopup(popupEditProfile);
-  // TODO: вынести в отдельный метод
-  // resetError(
-  //   popupEditProfile,
-  //   validationVar.inputSelector,
-  //   validationVar.submitButtonSelector,
-  //   validationVar.inactiveButtonClass
-  // );
+  formValidator["edit-user"].resetError();
+  popupEdit.open();
 });
 
-buttonAddMesto.addEventListener("click", () => {
-  nameMestoInput.value = "";
-  linkMestoInput.value = "";
-  openPopup(popupAddMesto);
-  // TODO: вынести в отдельный метод
-  // resetError(
-  //   popupAddMesto,
-  //   validationVar.inputSelector,
-  //   validationVar.submitButtonSelector,
-  //   validationVar.inactiveButtonClass
-  // );
-});
-/**
-formAddMesto.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-  renderLoading("Сохранение...", "Создать", true, buttonSaveMesto);
-  postNewCard(nameMestoInput, linkMestoInput)
+const popupAddCard = new PopupWithForm(popupAddMesto, (data) => {
+  renderLoading("Создание...", "Создать", true, buttonSaveMesto);
+  api
+    .postNewCard(data["name-new-mesto"], data["link-new-mesto"])
     .then((data) => {
-      pastNewMesto(
-        data.name,
-        data.link,
-        cardsContainer,
-        data._id,
-        [],
-        data.owner._id
+      const newCard = new Card(
+        data,
+        "newMesto",
+        userInfo._userId,
+        (openViewer) => {
+          popupWithImage.open(data.link, data.name);
+        }
       );
-      closePopup(popupAddMesto);
+      cardsContainer.addItem(
+        newCard.getFinishCard(
+          (addLike) => {
+            return api.addLike(data._id);
+          },
+          (delLike) => {
+            return api.deleteLike(data._id);
+          },
+          (delCard) => {
+            return api.deleteCard(data._id);
+          }
+        )
+      );
     })
     .catch((err) => {
       console.log(err);
     })
-    .finally(() =>
-      renderLoading("Сохранение...", "Создать", false, buttonSaveMesto)
-    );
+    .finally(() => {
+      renderLoading("Создание...", "Создать", false, buttonSaveMesto);
+      popupAddCard.close();
+    });
 });
-*/
-buttonNewAvatar.addEventListener("click", () => {
-  newAvatarInput.value = "";
-  openPopup(popupEditAvatar);
-  // TODO: вынести в отдельный метод
-  // resetError(
-  //   popupEditAvatar,
-  //   validationVar.inputSelector,
-  //   validationVar.submitButtonSelector,
-  //   validationVar.inactiveButtonClass
-  // );
+popupAddCard.setEventListeners();
+buttonAddMesto.addEventListener("click", () => {
+  nameMestoInput.value = "";
+  linkMestoInput.value = "";
+  formValidator["add-new-mesto"].resetError();
+  popupAddCard.open();
 });
 
-/**
-formEditAvatar.addEventListener("submit", (evt) => {
-  evt.preventDefault();
+const popupEditAva = new PopupWithForm(popupEditAvatar, (data) => {
   renderLoading("Сохранение...", "Сохранить", true, buttonSaveAvatar);
-  reloadAvatar(newAvatarInput)
+  api
+    .reloadNewAvatar(data["input-link-avatar"])
     .then((data) => {
       avatarImg.src = data.avatar;
-      closePopup(popupEditAvatar);
+      popupEditAva.close();
     })
-    .catch((res) => {
-      console.log(res);
+    .catch((err) => {
+      console.log(err);
     })
-    .finally(() =>
-      renderLoading("Сохранение...", "Сохранить", false, buttonSaveAvatar)
-    );
+    .finally(() => {
+      renderLoading("Сохранение...", "Сохранить", false, buttonSaveAvatar);
+      popupEditAva.close();
+    });
 });
-*/
+popupEditAva.setEventListeners();
+buttonNewAvatar.addEventListener("click", () => {
+  newAvatarInput.value = "";
+  formValidator["edit-avatar"].resetError();
+  popupEditAva.open();
+});
