@@ -1,4 +1,4 @@
-export class Cards {
+export class Card {
   constructor(data, templateSelector, idUser, openViewer) {
     this._nameCard = data.name;
     this._linkMesto = data.link;

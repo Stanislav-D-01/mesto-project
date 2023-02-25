@@ -2,35 +2,44 @@ import "../pages/index.css";
 import { UserInfo } from "./userInfo.js";
 import { FormValidator } from "./FormValidator.js";
 import { Section } from "./Section";
-import { Cards } from "./card.js";
+import { Card } from "./card.js";
 import { Api } from "./api.js";
 import { PopupWithForm } from "./PopupWithForm.js";
 import { PopupWithImage } from "./PopupWithImage";
-import {
-  validationVar,
-  nameMestoInput,
-  linkMestoInput,
-  config,
-  formElements,
-  buttonAddMesto,
-  buttonEditProfile,
-  profileUserName,
-  profileUserAbout,
-  popupEditProfile,
-  nameInput,
-  aboutInput,
-  popupEditAvatar,
-  newAvatarInput,
-  avatarImg,
-  buttonNewAvatar,
-  formValidator,
-  popupViewImg,
-  popupAddMesto,
-  buttonSaveProfile,
-  buttonSaveAvatar,
-  buttonSaveMesto,
-} from "./constants.js";
+import { validationVar, config } from "./constants.js";
 import { renderLoading } from "./utils.js";
+
+const popupAddMesto = document.querySelector(".add-mesto-popup");
+const nameMestoInput = document.querySelector("input[name=name-new-mesto]");
+const linkMestoInput = document.querySelector("input[name=link-new-mesto]");
+
+const formElements = document.querySelectorAll(validationVar.formSelector);
+
+const buttonAddMesto = document.querySelector(".profile__add-button");
+const buttonEditProfile = document.querySelector(".profile__edit-button");
+
+const formEditUser = document.querySelector('form[name="edit-user"]');
+
+const profileUserName = document.querySelector(".profile__user-name");
+const profileUserAbout = document.querySelector(".profile__user-about");
+const popupEditProfile = document.querySelector(".profile-popup");
+const nameInput = document.querySelector("input[name=name-user]");
+const aboutInput = document.querySelector("input[name=about-user]");
+const popupEditAvatar = document.querySelector(".avatar-popup");
+const formEditAvatar = document.querySelector("form[name=edit-avatar]");
+const newAvatarInput = formEditAvatar.querySelector(
+  "input[name=input-link-avatar]"
+);
+const avatarImg = document.querySelector(".profile__avatar");
+const buttonNewAvatar = document.querySelector(".profile__button-avatar-edit");
+
+const buttonSaveProfile = formEditUser.querySelector(".popup__button-save");
+const buttonSaveAvatar = popupEditAvatar.querySelector(".popup__button-save");
+const buttonSaveMesto = popupAddMesto.querySelector(".popup__button-save");
+
+const formValidator = {};
+const popupViewImg = document.querySelector(".popup-views-img");
+const cardsSelector = ".cards";
 
 formElements.forEach((formElement) => {
   formValidator[`${formElement.name}`] = new FormValidator(
@@ -55,9 +64,9 @@ api
   })
   .catch((err) => console.log(err));
 
-const viewer = new PopupWithImage(popupViewImg);
-viewer.setEventListeners();
-const container = new Section({}, ".cards");
+const popupWithImage = new PopupWithImage(popupViewImg);
+popupWithImage.setEventListeners();
+const cardsContainer = new Section({}, cardsSelector);
 
 api
   .getCards()
@@ -65,15 +74,15 @@ api
     data.reverse();
     let arrCards = [];
     for (let i = 0; i < data.length; i++) {
-      arrCards[i] = new Cards(
+      arrCards[i] = new Card(
         data[i],
         "newMesto",
         userInfo._userId,
         (openViewer) => {
-          viewer.open(arrCards[i]._linkMesto, arrCards[i]._nameCard);
+          popupWithImage.open(arrCards[i]._linkMesto, arrCards[i]._nameCard);
         }
       );
-      container.addItem(
+      cardsContainer.addItem(
         arrCards[i].getFinishCard(
           (addLike) => {
             return api.addLike(data[i]._id);
@@ -120,15 +129,15 @@ const popupAddCard = new PopupWithForm(popupAddMesto, (data) => {
   api
     .postNewCard(data["name-new-mesto"], data["link-new-mesto"])
     .then((data) => {
-      const newCard = new Cards(
+      const newCard = new Card(
         data,
         "newMesto",
         userInfo._userId,
         (openViewer) => {
-          viewer.open(data.link, data.name);
+          popupWithImage.open(data.link, data.name);
         }
       );
-      container.addItem(
+      cardsContainer.addItem(
         newCard.getFinishCard(
           (addLike) => {
             return api.addLike(data._id);
