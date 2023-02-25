@@ -100,8 +100,7 @@ api
   .catch((err) => console.log(err));
 
 const popupEdit = new PopupWithForm(popupEditProfile, (data) => {
-  renderLoading("Сохранение...", "Сохранить", true, buttonSaveProfile);
-  api
+  return api
     .editProfile(data["name-user"], data["about-user"])
     .then((data) => {
       profileUserName.textContent = data.name;
@@ -109,10 +108,6 @@ const popupEdit = new PopupWithForm(popupEditProfile, (data) => {
     })
     .catch((err) => {
       console.log(err);
-    })
-    .finally(() => {
-      popupEdit.close();
-      renderLoading("Сохранение...", "Сохранить", false, buttonSaveProfile);
     });
 });
 popupEdit.setEventListeners();
@@ -125,8 +120,7 @@ buttonEditProfile.addEventListener("click", () => {
 });
 
 const popupAddCard = new PopupWithForm(popupAddMesto, (data) => {
-  renderLoading("Создание...", "Создать", true, buttonSaveMesto);
-  api
+  return api
     .postNewCard(data["name-new-mesto"], data["link-new-mesto"])
     .then((data) => {
       const newCard = new Card(
@@ -153,10 +147,6 @@ const popupAddCard = new PopupWithForm(popupAddMesto, (data) => {
     })
     .catch((err) => {
       console.log(err);
-    })
-    .finally(() => {
-      renderLoading("Создание...", "Создать", false, buttonSaveMesto);
-      popupAddCard.close();
     });
 });
 popupAddCard.setEventListeners();
@@ -168,19 +158,13 @@ buttonAddMesto.addEventListener("click", () => {
 });
 
 const popupEditAva = new PopupWithForm(popupEditAvatar, (data) => {
-  renderLoading("Сохранение...", "Сохранить", true, buttonSaveAvatar);
-  api
+  return api
     .reloadNewAvatar(data["input-link-avatar"])
     .then((data) => {
       avatarImg.src = data.avatar;
-      popupEditAva.close();
     })
     .catch((err) => {
       console.log(err);
-    })
-    .finally(() => {
-      renderLoading("Сохранение...", "Сохранить", false, buttonSaveAvatar);
-      popupEditAva.close();
     });
 });
 popupEditAva.setEventListeners();

@@ -13,6 +13,7 @@ export class Card {
     this._buttonLike;
     this._buttonDelete;
     this._idUser;
+    this._card;
   }
 
   _createContainerNewMesto() {
@@ -48,15 +49,23 @@ export class Card {
   _addEventListenerLike(apiAddLike, apiDelLike) {
     this._buttonLike.addEventListener("click", () => {
       if (this._buttonLike.matches(".cards__like_active")) {
-        apiDelLike().then((data) => {
-          this._numLikes.textContent = data.likes.length;
-          this._buttonLike.classList.remove("cards__like_active");
-        });
+        apiDelLike()
+          .then((data) => {
+            this._numLikes.textContent = data.likes.length;
+            this._buttonLike.classList.remove("cards__like_active");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       } else {
-        apiAddLike().then((data) => {
-          this._numLikes.textContent = data.likes.length;
-          this._buttonLike.classList.add("cards__like_active");
-        });
+        apiAddLike()
+          .then((data) => {
+            this._numLikes.textContent = data.likes.length;
+            this._buttonLike.classList.add("cards__like_active");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     });
   }
@@ -65,7 +74,7 @@ export class Card {
     this._buttonDelete.addEventListener("click", function (evt) {
       apiDeleteCard()
         .then(() => {
-          evt.target.parentElement.remove();
+          this.closest(".cards__card").remove();
         })
         .catch((err) => {
           console.log(err);
