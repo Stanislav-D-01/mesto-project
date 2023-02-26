@@ -55,6 +55,8 @@ export class Api {
     return fetch(`${this._cardsUrl}/${cardId}`, {
       method: "DELETE",
       headers: this._headers,
+    }).then((res) => {
+      return this._checkResponse(res);
     });
   }
 

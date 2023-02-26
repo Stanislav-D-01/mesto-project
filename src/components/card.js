@@ -1,5 +1,13 @@
 export class Card {
-  constructor(data, templateSelector, idUser, openViewer) {
+  constructor(
+    data,
+    templateSelector,
+    idUser,
+    openViewer,
+    apiAddLike,
+    apiDelLike,
+    apiDeleteCard
+  ) {
     this._nameCard = data.name;
     this._linkMesto = data.link;
     this._likes = data.likes;
@@ -8,11 +16,15 @@ export class Card {
     this._idUser = idUser;
     this._template = document.querySelector(`#${templateSelector}`);
     this._openViewer = openViewer;
+    this._apiAddLike = apiAddLike;
+    this._apiDelLike = apiDelLike;
+    this._apiDeleteCard = apiDeleteCard;
     this._containerNewMesto;
     this._cardImage;
     this._buttonLike;
     this._buttonDelete;
     this._idUser;
+    this._card;
   }
 
   _createContainerNewMesto() {
@@ -45,27 +57,35 @@ export class Card {
     }
   }
 
-  _addEventListenerLike(apiAddLike, apiDelLike) {
+  _addEventListenerLike() {
     this._buttonLike.addEventListener("click", () => {
       if (this._buttonLike.matches(".cards__like_active")) {
-        apiDelLike().then((data) => {
-          this._numLikes.textContent = data.likes.length;
-          this._buttonLike.classList.remove("cards__like_active");
-        });
+        this._apiDelLike()
+          .then((data) => {
+            this._numLikes.textContent = data.likes.length;
+            this._buttonLike.classList.remove("cards__like_active");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       } else {
-        apiAddLike().then((data) => {
-          this._numLikes.textContent = data.likes.length;
-          this._buttonLike.classList.add("cards__like_active");
-        });
+        this._apiAddLike()
+          .then((data) => {
+            this._numLikes.textContent = data.likes.length;
+            this._buttonLike.classList.add("cards__like_active");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     });
   }
 
-  _addEventListenerDeleteCard(apiDeleteCard) {
+  _addEventListenerDeleteCard() {
     this._buttonDelete.addEventListener("click", function (evt) {
-      apiDeleteCard()
+      this._apiDeleteCard()
         .then(() => {
-          evt.target.parentElement.remove();
+          this.closest(".cards__card").remove();
         })
         .catch((err) => {
           console.log(err);
@@ -80,8 +100,8 @@ export class Card {
     this._card = this._createContainerNewMesto();
     this._checkMyLike();
     this._checkMyCards();
-    this._addEventListenerLike(addLike, delLike);
-    this._addEventListenerDeleteCard(DelCard);
+    this._addEventListenerLike();
+    this._addEventListenerDeleteCard();
     this._addEventListenerViewer();
     return this._card;
   }
