@@ -56,46 +56,37 @@ const userInfo = new UserInfo(
   ".profile__user-about",
   ".profile__avatar"
 );
-
-api
-  .getInfo()
-  .then(async (data) => {
-    await userInfo.setUserInfo(data);
-  })
-  .catch((err) => console.log(err));
-
+let infoObject = {};
 const popupWithImage = new PopupWithImage(popupViewImg);
 popupWithImage.setEventListeners();
 const cardsContainer = new Section({}, cardsSelector);
 
-api
-  .getCards()
-  .then((data) => {
-    data.reverse();
-    let arrCards = [];
-    for (let i = 0; i < data.length; i++) {
-      arrCards[i] = new Card(
-        data[i],
-        "newMesto",
-        userInfo._userId,
-        (openViewer) => {
-          popupWithImage.open(arrCards[i]._linkMesto, arrCards[i]._nameCard);
-        }
-      );
-      cardsContainer.addItem(
-        arrCards[i].getFinishCard(
-          (addLike) => {
-            return api.addLike(data[i]._id);
-          },
-          (delLike) => {
-            return api.deleteLike(data[i]._id);
-          },
-          (delCard) => {
-            return api.deleteCard(data[i]._id);
-          }
-        )
-      );
+function createCard(data) {
+  const newCard = new Card(data, "newMesto", userInfo._userId, (openViewer) => {
+    popupWithImage.open(data.link, data.name);
+  });
+  const cardElement = newCard.getFinishCard(
+    (addLike) => {
+      return api.addLike(data._id);
+    },
+    (delLike) => {
+      return api.deleteLike(data._id);
+    },
+    (delCard) => {
+      return api.deleteCard(data._id);
     }
+  );
+  return cardElement;
+}
+
+Promise.all([api.getInfo(), api.getCards()])
+  .then(([userInfoData, cards]) => {
+    infoObject = userInfo.getUserInfo(userInfoData);
+    userInfo.setUserInfo(userInfoData);
+    cards.reverse();
+    cards.forEach((card) => {
+      cardsContainer.addItem(createCard(card));
+    });
   })
   .catch((err) => console.log(err));
 
@@ -103,8 +94,8 @@ const popupEdit = new PopupWithForm(popupEditProfile, (data) => {
   return api
     .editProfile(data["name-user"], data["about-user"])
     .then((data) => {
-      profileUserName.textContent = data.name;
-      profileUserAbout.textContent = data.about;
+      userInfo.setUserInfo(data);
+      infoObject = userInfo.getUserInfo(data);
     })
     .catch((err) => {
       console.log(err);
@@ -113,8 +104,8 @@ const popupEdit = new PopupWithForm(popupEditProfile, (data) => {
 popupEdit.setEventListeners();
 
 buttonEditProfile.addEventListener("click", () => {
-  nameInput.value = profileUserName.textContent;
-  aboutInput.value = profileUserAbout.textContent;
+  nameInput.value = infoObject.name;
+  aboutInput.value = infoObject.about;
   formValidator["edit-user"].resetError();
   popupEdit.open();
 });
@@ -123,27 +114,7 @@ const popupAddCard = new PopupWithForm(popupAddMesto, (data) => {
   return api
     .postNewCard(data["name-new-mesto"], data["link-new-mesto"])
     .then((data) => {
-      const newCard = new Card(
-        data,
-        "newMesto",
-        userInfo._userId,
-        (openViewer) => {
-          popupWithImage.open(data.link, data.name);
-        }
-      );
-      cardsContainer.addItem(
-        newCard.getFinishCard(
-          (addLike) => {
-            return api.addLike(data._id);
-          },
-          (delLike) => {
-            return api.deleteLike(data._id);
-          },
-          (delCard) => {
-            return api.deleteCard(data._id);
-          }
-        )
-      );
+      cardsContainer.addItem(createCard(data));
     })
     .catch((err) => {
       console.log(err);
@@ -161,7 +132,7 @@ const popupEditAva = new PopupWithForm(popupEditAvatar, (data) => {
   return api
     .reloadNewAvatar(data["input-link-avatar"])
     .then((data) => {
-      avatarImg.src = data.avatar;
+      userInfo.setUserInfo(data);
     })
     .catch((err) => {
       console.log(err);

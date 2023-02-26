@@ -3,6 +3,7 @@ export class UserInfo {
     this._elementName = document.querySelector(selName);
     this._elementAbout = document.querySelector(selAbout);
     this._elementAvatar = document.querySelector(selAvatar);
+    this._userId;
   }
 
   getUserInfo(data) {
