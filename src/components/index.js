@@ -62,11 +62,14 @@ popupWithImage.setEventListeners();
 const cardsContainer = new Section({}, cardsSelector);
 
 function createCard(data) {
-  const newCard = new Card(data, "newMesto", userInfo._userId, (openViewer) => {
-    popupWithImage.open(data.link, data.name);
-  });
-  const cardElement = newCard.getFinishCard(
-    (addLike) => {
+  const newCard = new Card(
+    data,
+    "newMesto",
+    userInfo._userId,
+    (openViewer) => {
+      popupWithImage.open(data.link, data.name);
+    },
+    (AddLike) => {
       return api.addLike(data._id);
     },
     (delLike) => {
@@ -76,6 +79,7 @@ function createCard(data) {
       return api.deleteCard(data._id);
     }
   );
+  const cardElement = newCard.getFinishCard();
   return cardElement;
 }
 
