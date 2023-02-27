@@ -1,185 +1,150 @@
 import "../pages/index.css";
-import { enableValidation, validationVar, resetError } from "./validate.js";
-import { openPopup, closePopup, addListenerPopup } from "./modal.js";
+import { UserInfo } from "./userInfo.js";
+import { FormValidator } from "./FormValidator.js";
+import { Section } from "./Section";
+import { Card } from "./card.js";
+import { Api } from "./api.js";
+import { PopupWithForm } from "./PopupWithForm.js";
+import { PopupWithImage } from "./PopupWithImage";
+import { validationVar, config } from "./constants.js";
+import { renderLoading } from "./utils.js";
 
-import {
-  nameMestoInput,
-  linkMestoInput,
-  popupAddMesto,
-  pastNewMesto,
-  cardsContainer,
-} from "./card.js";
-import {
-  loadAvatar,
-  reloadAvatar,
-  getUserInfo,
-  getCards,
-  postNewCard,
-  patchProfile,
-  addLike,
-  deleteLike,
-} from "./api";
-import { renderLoading } from "./utils";
+const popupAddMesto = document.querySelector(".add-mesto-popup");
+const nameMestoInput = document.querySelector("input[name=name-new-mesto]");
+const linkMestoInput = document.querySelector("input[name=link-new-mesto]");
 
-export const formAddMesto = document.querySelector("form[name=add-new-mesto]");
+const formElements = document.querySelectorAll(validationVar.formSelector);
+
 const buttonAddMesto = document.querySelector(".profile__add-button");
 const buttonEditProfile = document.querySelector(".profile__edit-button");
-const buttonsClose = document.querySelectorAll(".popup__icon-close");
+
 const formEditUser = document.querySelector('form[name="edit-user"]');
-const buttonSaveMesto = popupAddMesto.querySelector(".popup__button-save");
-export const profileUserName = document.querySelector(".profile__user-name");
-export const profileUserAbout = document.querySelector(".profile__user-about");
-export const popupEditProfile = document.querySelector(".profile-popup");
+
+const profileUserName = document.querySelector(".profile__user-name");
+const profileUserAbout = document.querySelector(".profile__user-about");
+const popupEditProfile = document.querySelector(".profile-popup");
 const nameInput = document.querySelector("input[name=name-user]");
 const aboutInput = document.querySelector("input[name=about-user]");
-export const popupEditAvatar = document.querySelector(".avatar-popup");
+const popupEditAvatar = document.querySelector(".avatar-popup");
 const formEditAvatar = document.querySelector("form[name=edit-avatar]");
 const newAvatarInput = formEditAvatar.querySelector(
   "input[name=input-link-avatar]"
 );
 const avatarImg = document.querySelector(".profile__avatar");
 const buttonNewAvatar = document.querySelector(".profile__button-avatar-edit");
-export let idUser = "";
-let initialCards = {};
+
 const buttonSaveProfile = formEditUser.querySelector(".popup__button-save");
 const buttonSaveAvatar = popupEditAvatar.querySelector(".popup__button-save");
-enableValidation(validationVar);
-addListenerPopup();
+const buttonSaveMesto = popupAddMesto.querySelector(".popup__button-save");
 
-Promise.all([getUserInfo(), loadAvatar(), getCards()])
-  .then(([userInfo, avatar, cards]) => {
-    profileUserName.textContent = userInfo.name;
-    profileUserAbout.textContent = userInfo.about;
-    idUser = userInfo._id;
-    avatarImg.src = avatar.avatar;
-    initialCards = cards;
-    for (let i = 0; i < initialCards.length; i++) {
-      pastNewMesto(
-        initialCards[initialCards.length - i - 1].name,
-        initialCards[initialCards.length - i - 1].link,
-        cardsContainer,
-        initialCards[initialCards.length - i - 1]._id,
-        initialCards[initialCards.length - i - 1].likes,
-        initialCards[initialCards.length - i - 1].owner._id
-      );
+const formValidator = {};
+const popupViewImg = document.querySelector(".popup-views-img");
+const cardsSelector = ".cards";
+
+formElements.forEach((formElement) => {
+  formValidator[`${formElement.name}`] = new FormValidator(
+    validationVar,
+    formElement
+  );
+  formValidator[`${formElement.name}`].enableValidation();
+});
+
+const api = new Api(config);
+
+const userInfo = new UserInfo(
+  ".profile__user-name",
+  ".profile__user-about",
+  ".profile__avatar"
+);
+let infoObject = {};
+const popupWithImage = new PopupWithImage(popupViewImg);
+popupWithImage.setEventListeners();
+const cardsContainer = new Section({}, cardsSelector);
+
+function createCard(data) {
+  const newCard = new Card(
+    data,
+    "newMesto",
+    userInfo._userId,
+    (openViewer) => {
+      popupWithImage.open(data.link, data.name);
+    },
+    (AddLike) => {
+      return api.addLike(data._id);
+    },
+    (delLike) => {
+      return api.deleteLike(data._id);
+    },
+    (delCard) => {
+      return api.deleteCard(data._id);
     }
+  );
+  const cardElement = newCard.getFinishCard();
+  return cardElement;
+}
+
+Promise.all([api.getInfo(), api.getCards()])
+  .then(([userInfoData, cards]) => {
+    infoObject = userInfo.getUserInfo(userInfoData);
+    userInfo.setUserInfo(userInfoData);
+    cards.reverse();
+    cards.forEach((card) => {
+      cardsContainer.addItem(createCard(card));
+    });
   })
   .catch((err) => console.log(err));
 
-formEditUser.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-  renderLoading("Сохранение", "Сохранить", true, buttonSaveProfile);
-  patchProfile(nameInput, aboutInput)
+const popupEdit = new PopupWithForm(popupEditProfile, (data) => {
+  return api
+    .editProfile(data["name-user"], data["about-user"])
     .then((data) => {
-      profileUserName.textContent = data.name;
-      profileUserAbout.textContent = data.about;
-      closePopup(popupEditProfile);
+      userInfo.setUserInfo(data);
+      infoObject = userInfo.getUserInfo(data);
     })
     .catch((err) => {
       console.log(err);
-    })
-    .finally(() =>
-      renderLoading("Сохранение...", "Сохранить", false, buttonSaveProfile)
-    );
+    });
 });
-
-buttonsClose.forEach((button) => {
-  button.addEventListener("click", closePopup);
-});
+popupEdit.setEventListeners();
 
 buttonEditProfile.addEventListener("click", () => {
-  nameInput.value = profileUserName.textContent;
-  aboutInput.value = profileUserAbout.textContent;
-  openPopup(popupEditProfile);
-  resetError(
-    popupEditProfile,
-    validationVar.inputSelector,
-    validationVar.submitButtonSelector,
-    validationVar.inactiveButtonClass
-  );
+  nameInput.value = infoObject.name;
+  aboutInput.value = infoObject.about;
+  formValidator["edit-user"].resetError();
+  popupEdit.open();
 });
 
+const popupAddCard = new PopupWithForm(popupAddMesto, (data) => {
+  return api
+    .postNewCard(data["name-new-mesto"], data["link-new-mesto"])
+    .then((data) => {
+      cardsContainer.addItem(createCard(data));
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+popupAddCard.setEventListeners();
 buttonAddMesto.addEventListener("click", () => {
   nameMestoInput.value = "";
   linkMestoInput.value = "";
-  openPopup(popupAddMesto);
-  resetError(
-    popupAddMesto,
-    validationVar.inputSelector,
-    validationVar.submitButtonSelector,
-    validationVar.inactiveButtonClass
-  );
+  formValidator["add-new-mesto"].resetError();
+  popupAddCard.open();
 });
 
-formAddMesto.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-  renderLoading("Сохранение...", "Создать", true, buttonSaveMesto);
-  postNewCard(nameMestoInput, linkMestoInput)
+const popupEditAva = new PopupWithForm(popupEditAvatar, (data) => {
+  return api
+    .reloadNewAvatar(data["input-link-avatar"])
     .then((data) => {
-      pastNewMesto(
-        data.name,
-        data.link,
-        cardsContainer,
-        data._id,
-        [],
-        data.owner._id
-      );
-      closePopup(popupAddMesto);
+      userInfo.setUserInfo(data);
     })
     .catch((err) => {
       console.log(err);
-    })
-    .finally(() =>
-      renderLoading("Сохранение...", "Создать", false, buttonSaveMesto)
-    );
+    });
 });
-
+popupEditAva.setEventListeners();
 buttonNewAvatar.addEventListener("click", () => {
   newAvatarInput.value = "";
-  openPopup(popupEditAvatar);
-  resetError(
-    popupEditAvatar,
-    validationVar.inputSelector,
-    validationVar.submitButtonSelector,
-    validationVar.inactiveButtonClass
-  );
+  formValidator["edit-avatar"].resetError();
+  popupEditAva.open();
 });
-
-formEditAvatar.addEventListener("submit", (evt) => {
-  evt.preventDefault();
-  renderLoading("Сохранение...", "Сохранить", true, buttonSaveAvatar);
-  reloadAvatar(newAvatarInput)
-    .then((data) => {
-      avatarImg.src = data.avatar;
-      closePopup(popupEditAvatar);
-    })
-    .catch((res) => {
-      console.log(res);
-    })
-    .finally(() =>
-      renderLoading("Сохранение...", "Сохранить", false, buttonSaveAvatar)
-    );
-});
-
-export function toggleLike(status, cardId, evt, numLikes) {
-  if (status == "del") {
-    deleteLike(cardId)
-      .then((data) => {
-        numLikes.textContent = data.likes.length;
-        evt.target.classList.remove("cards__like_active");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-  if (status == "add") {
-    addLike(cardId)
-      .then((data) => {
-        numLikes.textContent = data.likes.length;
-        evt.target.classList.add("cards__like_active");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-}
