@@ -82,10 +82,10 @@ export class Card {
   }
 
   _addEventListenerDeleteCard() {
-    this._buttonDelete.addEventListener("click", function (evt) {
+    this._buttonDelete.addEventListener("click", () => {
       this._apiDeleteCard()
         .then(() => {
-          this.closest(".cards__card").remove();
+          this._buttonDelete.closest(".cards__card").remove();
         })
         .catch((err) => {
           console.log(err);
@@ -96,7 +96,7 @@ export class Card {
     this._cardImage.addEventListener("click", this._openViewer);
   }
 
-  getFinishCard(addLike, delLike, DelCard) {
+  getFinishCard() {
     this._card = this._createContainerNewMesto();
     this._checkMyLike();
     this._checkMyCards();
